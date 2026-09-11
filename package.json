@@ -1,0 +1,18 @@
+{
+  "name": "blind-sight-lib",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Gaze-steered synthetic-echo sensory substitution — acoustic scene library and demo",
+  "scripts": {
+    "release": "commit-and-tag-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeblad/blind-sight-lib.git"
+  },
+  "author": "John Erling Blad",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "commit-and-tag-version": "^12.7.3"
+  }
+}

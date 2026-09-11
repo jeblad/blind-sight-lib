@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the blind-sight-demo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: blind-sight-demo 0.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-11 12:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: demo/main.cpp:85 demo/main.cpp:113 demo/main.cpp:200
+msgid "Blind Sight"
+msgstr ""
+
+#: demo/main.cpp:89
+msgid "Echolocation for blind and visually impaired people"
+msgstr ""
+
+#: demo/main.cpp:92
+msgid "© John Erling Blad, 2026"
+msgstr ""
+
+#: demo/main.cpp:121
+msgid "translator-credits"
+msgstr ""
+
+#: demo/main.cpp:177
+msgid "Preferences"
+msgstr ""
+
+#: demo/main.cpp:178
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: demo/main.cpp:179
+msgid "About Blind Sight"
+msgstr ""

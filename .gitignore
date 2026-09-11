@@ -1,0 +1,14 @@
+# Build output (CMakeUserPresets.json puts it under build/<preset>/)
+build/
+
+# Local RGB-D samples for development — not part of the repo, see notes.md
+# "Repo & licensing" (dataset licenses don't allow bundling).
+data/
+
+# Editor / tooling
+.cache/
+compile_commands.json
+
+# Node tooling for commit-and-tag-version (release/CHANGELOG only, not the
+# build) — package-lock.json is committed, node_modules/ is not.
+node_modules/
