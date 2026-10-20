@@ -9,24 +9,25 @@ demo/data/gschemas.compiled
 # Editor / tooling
 .cache/
 compile_commands.json
+__pycache__/
 
 # Node tooling for commit-and-tag-version (release/CHANGELOG only, not the
 # build) — package-lock.json is committed, node_modules/ is not.
 node_modules/
 
-# Screenshots made during debugging
-screenshots/
+# Cruft that should not be tracked
+old/
+*/old/
 
-# Local dir for tracking AI usage
-logs/
-
-# Work dir for session files – should not be published
-sessions/
-
-# Work notes
-notes.md
-TODO.md
-
-# Depth-generation Python venv (demo/depth/setup-depth-env.sh creates it) —
-# requirements.txt is committed for reproducibility, the venv itself isn't.
-demo/depth/.venv/
+# Local scratch space. Projects named without a trailing serial number
+# (scratch/example/) are committed and hold nothing real; a name ending in
+# a hyphen and digits, as the app names new projects
+# (scratch/fadderullandei-000011/), stays local, as do loose files.
+# scratch/* rather than scratch/: an ignored directory can't have anything
+# under it re-included. The last matching pattern wins; the final two
+# lines together mean "-<digits> at the end", which a single glob can't
+# say.
+scratch/*
+!scratch/*/
+scratch/*-[0-9]*/
+!scratch/*-[0-9]*[!0-9]/
