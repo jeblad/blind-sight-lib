@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Transcription for recorded dialogue (John, 2026-09-24) — see notes.md,
+# "Transcript generation via WhisperX". Speaker diarization (2026-09-26,
+# see notes.md "Diarization setup") uses pyannote.audio, already a
+# transitive dependency of whisperx itself — no separate package needed.
+# It only actually runs when transcribe.py is invoked with --diarize and
+# HF_TOKEN is set; otherwise this venv needs no HuggingFace account or
+# token at all, same as before.
+whisperx>=3.1

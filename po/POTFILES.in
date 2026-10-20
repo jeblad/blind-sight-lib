@@ -1,1 +1,14 @@
+demo/audio_devices.cpp
+demo/bt_output_check.cpp
+demo/collection_editor.cpp
+demo/depth.cpp
+demo/image_dialogs.cpp
 demo/main.cpp
+demo/monitoring_dialogs.cpp
+demo/preferences.cpp
+demo/project_dialogs.cpp
+demo/session_dialogs.cpp
+demo/textures.cpp
+demo/trace_delay.cpp
+demo/track_dialogs.cpp
+demo/transcription.cpp

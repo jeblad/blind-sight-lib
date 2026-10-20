@@ -1,0 +1,10 @@
+[Unit]
+Description=Force Bluetooth adapter bind order at boot (same fix as suspend/resume)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/lib/systemd/system-sleep/00-bluetooth-adapter-order.sh post boot
+
+[Install]
+WantedBy=multi-user.target

@@ -14,19 +14,17 @@ severely visually impaired users.
 - **`notes.md` in this repo is the evolving design note** — pipeline shape,
   reasoning, open questions, decisions as they are made. Read it alongside this
   file; keep it current as the library takes shape.
+- **`TODO.md` is the concrete action-item checklist** — bounded, doable tasks,
+  separate from `notes.md`'s narrative log and open design questions.
 - The concept note this library serves lives in a **separate, private,
   all-rights-reserved repo**: `github.com/jeblad/blind-sight` (Norwegian Bokmål).
-  Its `notat.md` is the origin of the render-side design (sections
-  "Renderarkitektur — parallell filterbank fra dybdekartet", "Rendermotor —
-  detaljert gjennomgang", "Kanalbudsjett for sonifiseringen",
-  "Render-omfang — additiv, og hvor mye"). `notes.md` here restates what the
-  library needs in original English wording — do not copy that prose across, the
-  two repos have different licences.
+  `notes.md` here restates what the library needs in original English wording —
+  do not copy prose across, the two repos have different licences.
 - The library is deliberately **hardware-independent**. It runs on recorded
   video with eye tracking, or on synthetic depth data, and plays through
-  ordinary headphones. Building it first, before any prototype hardware, is the
-  concept note's explicit recommendation (and has precedent: Bizoń-Angov et al.
-  2021 tried a comparable sound idea in simulation before building a device).
+  ordinary headphones. Building it first, before any prototype hardware, is
+  deliberate (and has precedent: Bizoń-Angov et al. 2021 tried a comparable
+  sound idea in simulation before building a device).
 
 ## Design constraints carried over from the concept work
 
@@ -86,10 +84,27 @@ These are settled at the concept level. Revisit them only with John.
 - Code, comments, README, and API docs in **English** (public OSS library). The
   concept note is Norwegian; the library is not.
 - **Target platform: Ubuntu / Linux / GNOME.** Develop and test there; no need to
-  carry other platforms unless John asks.
+  carry other platforms unless John asks. This is a practical choice, not a
+  technical requirement of the concept: it's the platform John knows best and
+  can meaningfully review/debug. A Windows implementation would leave him
+  unable to collaborate on or catch problems in the actual development work —
+  that's the reason to stay on Linux, not anything inherent to the sonification
+  design itself.
 - Targeted tests over clear execution paths. No heavyweight test framework
   unless the suite genuinely outgrows a hand-written one.
 - Programming language and runtime not yet chosen — confirm with John before
   scaffolding.
 - Never run `git add` / `git commit` for John. Draft the message, hand it back.
   No AI-authorship line in commits.
+
+## C/C++ Comment Rules
+
+- Comments state the invariant and its one core reason, in few sentences.
+- Don't restate the point in different words or terms.
+- Don't stack secondary detail or alternative considered, unless those have real implications that must be handled.
+- Don't bundle two separate concerns in one comment block — split them.
+- Do NOT output narrative, conversational, or historical comments (e.g., "Changed X to Y", "Refactored this section", or "Updated because...").
+- Do NOT write inline comments that restate what the code clearly does (e.g., `i++; // Increment i`).
+- Keep existing code comments concise. If a change invalidates a comment, delete the comment rather than rewriting its history.
+- Explain non-obvious hardware constraints, safety warnings, subtle memory-management logic, or involved hard to understand algorithms.
+

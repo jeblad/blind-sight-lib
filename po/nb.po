@@ -2,11 +2,53 @@
 # Copyright (C) 2026 John Erling Blad
 # This file is distributed under the same license as the blind-sight-demo package.
 #
+# Glossary:
+#   Session            sesjon (always, never «økt»)
+#   Record (mode)      opptak (tooltip on the button: «Ta opp»)
+#   Playback (mode)    avspilling
+#   Recording          opptak
+#   Track              spor
+#   Test step          testtrinn
+#   Viewport           synsfelt
+#   Gaze cursor        blikk-peker
+#   Caption            bildetekst
+#   Creator            opphaver
+#   Contributor        bidragsyter
+#   Microphone         mikrofon
+#   Speaker (device)   høyttaler
+#   Speaker (talker)   taler
+#   Listening device   lytteenhet
+#   Mute / muted       demp / dempet
+#   Assign             tilordne
+#   Connected          tilkoblet
+#   Disconnected       frakoblet
+#   Participant        deltaker
+#   Ambient            ambient (Ambient mikrofon, Ambient høyttaler)
+#   Monitoring         medhør (monitoring matrix: medhørsmatrise)
+#   Prod               prod, a technical term (fagord) for probing (en prod, proden, proder; å prodde)
+#   Head-prod          hodeprod
+#   Fixation time      fikseringstid (pointer: for peker; gaze: for blikk)
+#   Voice levelling    stemmejustering
+#   ADSR terms         attack, decay, sustain, release — technical terms, kept as is (sustain-nivå, sustain-fasen)
+#   Diarization        diarisering (diarize: diarisere)
+#   Alignment model    alignment-modell (technical term; gives each word its timestamp)
+#   Bigram             bigram, pl. bigrammer (technical term; the two-letter label in the matrix)
+#   Model names        not translated (Small, Medium, Large-v3, Base, Large)
+#   Synthesized        syntetisert
+#   Gain               forsterkning
+#   Latency / delay    forsinkelse
+#   Transcode          omkode
+#   Depth map          dybdekart
+#   Fiducial marker    referansemarkør
+#   Preferences        innstillinger
+#
+# Quotes are «», and dialog-opening labels end in "…" with no space.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: blind-sight-demo 0.0.0\n"
+"Project-Id-Version: blind-sight-demo 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 12:27+0200\n"
+"POT-Creation-Date: 2026-10-21 00:53+0200\n"
 "PO-Revision-Date: 2026-09-11 12:25+0200\n"
 "Last-Translator: John Erling Blad\n"
 "Language-Team: Norwegian Bokmål\n"
@@ -16,30 +58,1594 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: demo/main.cpp:85 demo/main.cpp:113 demo/main.cpp:200
+#: demo/audio_devices.cpp:148
+msgid "Bluetooth handsfree, reduced quality — Connected"
+msgstr "Bluetooth handsfree, redusert kvalitet — tilkoblet"
+
+#: demo/audio_devices.cpp:149
+msgid "Bluetooth handsfree, reduced quality — Not Connected"
+msgstr "Bluetooth handsfree, redusert kvalitet — ikke tilkoblet"
+
+#: demo/audio_devices.cpp:151
+msgid "Bluetooth — Connected"
+msgstr "Bluetooth — tilkoblet"
+
+#: demo/audio_devices.cpp:152
+msgid "Bluetooth — Not Connected"
+msgstr "Bluetooth — ikke tilkoblet"
+
+#: demo/bt_output_check.cpp:90
+msgid "Bluetooth speaker/headphones detected, expect high latency!"
+msgstr "Bluetooth-høyttaler/-hodetelefoner oppdaget, forvent høy forsinkelse!"
+
+#: demo/bt_output_check.cpp:92
+msgid "Bluetooth speaker/headphones detected (%1), expect high latency!"
+msgstr ""
+"Bluetooth-høyttaler/-hodetelefoner oppdaget (%1), forvent høy forsinkelse!"
+
+#: demo/collection_editor.cpp:255 demo/collection_editor.cpp:269
+msgid "Show Selected"
+msgstr "Vis valgte"
+
+#: demo/collection_editor.cpp:266
+msgid "Hide Selected"
+msgstr "Skjul valgte"
+
+#: demo/depth.cpp:159
+msgid "Downloading depth model…"
+msgstr "Laster ned dybdemodell…"
+
+#: demo/depth.cpp:193
+msgid "Depth Model Download Failed"
+msgstr "Nedlasting av dybdemodell mislyktes"
+
+#: demo/depth.cpp:194
+msgid ""
+"Downloading the depth model failed — check your network connection, then try "
+"again."
+msgstr ""
+"Nedlastingen av dybdemodellen mislyktes — sjekk nettverkstilkoblingen, og "
+"prøv igjen."
+
+#: demo/image_dialogs.cpp:132 demo/image_dialogs.cpp:232 demo/main.cpp:2794
+msgid "Images"
+msgstr "Bilder"
+
+#: demo/image_dialogs.cpp:139
+msgid "Import Images to Collection"
+msgstr "Importer bilder til samlingen"
+
+#: demo/image_dialogs.cpp:272 demo/image_dialogs.cpp:568
+msgid "Import Image(s)…"
+msgstr "Importer bilde(r)…"
+
+#: demo/image_dialogs.cpp:278 demo/image_dialogs.cpp:397
+#: demo/image_dialogs.cpp:602
+msgid "Image Details"
+msgstr "Bildedetaljer"
+
+#: demo/image_dialogs.cpp:318
+msgid "Delete Image"
+msgstr "Slett bilde"
+
+#: demo/image_dialogs.cpp:347
+msgid ""
+"“%1” is referenced from protocol.md — deleting it will leave that reference "
+"pointing at nothing. This can't be undone."
+msgstr ""
+"«%1» er referert fra protocol.md — sletter du det, vil den referansen peke "
+"på ingenting. Dette kan ikke gjøres om."
+
+#: demo/image_dialogs.cpp:351
+msgid "“%1” will be permanently deleted. This can't be undone."
+msgstr "«%1» vil bli slettet for godt. Dette kan ikke gjøres om."
+
+#: demo/image_dialogs.cpp:352
+msgid "Delete Image?"
+msgstr "Slette bilde?"
+
+#: demo/image_dialogs.cpp:408 demo/project_dialogs.cpp:343
+#: demo/session_dialogs.cpp:291
+msgid "Title"
+msgstr "Tittel"
+
+#: demo/image_dialogs.cpp:415
+msgid "Caption"
+msgstr "Bildetekst"
+
+#: demo/image_dialogs.cpp:429 demo/session_dialogs.cpp:296
+msgid "Creator"
+msgstr "Opphaver"
+
+#: demo/image_dialogs.cpp:430
+msgid "Copyright"
+msgstr "Copyright"
+
+#: demo/image_dialogs.cpp:431
+msgid "Slug"
+msgstr "Slug"
+
+#: demo/image_dialogs.cpp:432 demo/project_dialogs.cpp:356
+#: demo/session_dialogs.cpp:326 demo/track_dialogs.cpp:176
+msgid "Location"
+msgstr "Sted"
+
+#: demo/image_dialogs.cpp:444 demo/main.cpp:2225
+#: demo/monitoring_dialogs.cpp:511 demo/project_dialogs.cpp:162
+#: demo/project_dialogs.cpp:365 demo/session_dialogs.cpp:359
+#: demo/trace_delay.cpp:234 demo/track_dialogs.cpp:184
+#: demo/transcription.cpp:735
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: demo/image_dialogs.cpp:445 demo/project_dialogs.cpp:366
+#: demo/track_dialogs.cpp:185
+msgid "Save"
+msgstr "Lagre"
+
+#: demo/image_dialogs.cpp:474 demo/project_dialogs.cpp:459
+#: demo/session_dialogs.cpp:501
+msgid "Couldn't Save"
+msgstr "Kunne ikke lagre"
+
+#: demo/image_dialogs.cpp:475
+msgid ""
+"images.json was changed by something else while this dialog was open — your "
+"edit was not saved. Reopen and try again."
+msgstr ""
+"images.json ble endret av noe annet mens denne dialogen var åpen — endringen "
+"din ble ikke lagret. Åpne på nytt og prøv igjen."
+
+#: demo/image_dialogs.cpp:572 demo/image_dialogs.cpp:585 demo/main.cpp:4152
+#: demo/main.cpp:5328 demo/main.cpp:6004 demo/main.cpp:6599
+#: demo/session_dialogs.cpp:459
+msgid "No Project"
+msgstr "Ingen prosjekt"
+
+#: demo/image_dialogs.cpp:573 demo/image_dialogs.cpp:586
+msgid "Open or create a project first — images always live inside a project."
+msgstr ""
+"Åpne eller opprett et prosjekt først — bilder finnes alltid inne i et "
+"prosjekt."
+
+#: demo/image_dialogs.cpp:580 demo/project_dialogs.cpp:426
+#: demo/session_dialogs.cpp:454
+msgid "Edit Collection…"
+msgstr "Rediger samling…"
+
+#: demo/main.cpp:1004 demo/main.cpp:4239
+msgid "Next"
+msgstr "Neste"
+
+#: demo/main.cpp:1070
+msgid "Back"
+msgstr "Tilbake"
+
+#: demo/main.cpp:1074 demo/main.cpp:1116
+msgid "Failed"
+msgstr "Mislykket"
+
+#: demo/main.cpp:1078 demo/main.cpp:1113
+msgid "Validated"
+msgstr "Validert"
+
+#: demo/main.cpp:1119 demo/main.cpp:1213
+msgid "Back navigation may invalidate results"
+msgstr "Tilbakenavigering kan ugyldiggjøre resultatet"
+
+#: demo/main.cpp:1237 demo/main.cpp:1270 demo/main.cpp:1282 demo/main.cpp:1321
+#: demo/main.cpp:1389 demo/main.cpp:1399 demo/main.cpp:4886 demo/main.cpp:4912
+msgid "Protocol"
+msgstr "Protokoll"
+
+#: demo/main.cpp:1238
+msgid "This scenario has no test steps."
+msgstr "Dette scenarioet har ingen testtrinn."
+
+#: demo/main.cpp:1321
+msgid "This protocol has no scenarios."
+msgstr "Denne protokollen har ingen scenarioer."
+
+#: demo/main.cpp:1373
+msgid "No Protocol Section"
+msgstr "Ingen protokollseksjon"
+
+#: demo/main.cpp:1374
+msgid "The image currently on screen has no matching section in protocol.md."
+msgstr "Bildet som vises nå har ingen tilhørende seksjon i protocol.md."
+
+#: demo/main.cpp:1905
+msgid "Dump Sound Paths"
+msgstr "Dump lydoppsett"
+
+#: demo/main.cpp:1924
+msgid "Dumped to %1"
+msgstr "Dumpet til %1"
+
+#: demo/main.cpp:2226
+msgid "Delete"
+msgstr "Slett"
+
+#: demo/main.cpp:2419
+msgid "azimuth:"
+msgstr "asimut:"
+
+#: demo/main.cpp:2420
+msgid "elevation:"
+msgstr "elevasjon:"
+
+#: demo/main.cpp:2421
+msgid "depth:"
+msgstr "dybde:"
+
+#: demo/main.cpp:2712 demo/main.cpp:2748 demo/main.cpp:3924
 msgid "Blind Sight"
 msgstr "Blind Sight"
 
-#: demo/main.cpp:89
+#: demo/main.cpp:2716
 msgid "Echolocation for blind and visually impaired people"
 msgstr "Ekkolokalisering for blinde og svaksynte"
 
-#: demo/main.cpp:92
+#: demo/main.cpp:2722
+msgid "Test rig for functional verification"
+msgstr "Testrigg for funksjonell verifisering"
+
+#: demo/main.cpp:2726
 msgid "© John Erling Blad, 2026"
 msgstr "© John Erling Blad, 2026"
 
-#: demo/main.cpp:121
+#: demo/main.cpp:2759
 msgid "translator-credits"
 msgstr "John Erling Blad"
 
-#: demo/main.cpp:177
+#: demo/main.cpp:2782
+msgid "Viewport"
+msgstr "Synsfelt"
+
+#: demo/main.cpp:2785
+msgid "Look around"
+msgstr "Se seg rundt"
+
+#: demo/main.cpp:2797
+msgid "Next Image"
+msgstr "Neste bilde"
+
+#: demo/main.cpp:2802
+msgid "Previous Image"
+msgstr "Forrige bilde"
+
+#: demo/main.cpp:2808
+msgid "Window"
+msgstr "Vindu"
+
+#: demo/main.cpp:2811
+msgid "Toggle Fullscreen"
+msgstr "Veksle fullskjerm"
+
+#: demo/main.cpp:2816
+msgid "Exit Fullscreen"
+msgstr "Avslutt fullskjerm"
+
+#: demo/main.cpp:2882 demo/preferences.cpp:1062
+msgid "Depth Generation Not Set Up"
+msgstr "Dybdegenerering er ikke satt opp"
+
+#: demo/main.cpp:2883
+msgid ""
+"Run this from a terminal — images will then get a depth map automatically "
+"when opened."
+msgstr ""
+"Kjør dette fra en terminal — bilder får da et dybdekart automatisk når de "
+"åpnes."
+
+#: demo/main.cpp:2891
+msgid "Generating depth map…"
+msgstr "Genererer dybdekart…"
+
+#: demo/main.cpp:3033
+msgid "Transcoding to Opus…"
+msgstr "Omkoder til Opus…"
+
+#: demo/main.cpp:3056
+msgid "Could not transcode to Opus — kept as WAV"
+msgstr "Kunne ikke omkode til Opus — beholdt som WAV"
+
+#: demo/main.cpp:3432 demo/main.cpp:3455
+msgid "OK"
+msgstr "OK"
+
+#: demo/main.cpp:3953
+msgid "Reconcile Protocol"
+msgstr "Avstem protokoll"
+
+#: demo/main.cpp:3954
+msgid "Trace Sound Delay…"
+msgstr "Mål lydforsinkelse…"
+
+#: demo/main.cpp:3955
+msgid "Dump Sound Paths…"
+msgstr "Dump lydoppsett…"
+
+#: demo/main.cpp:3956
 msgid "Preferences"
 msgstr "Innstillinger"
 
-#: demo/main.cpp:178
+#: demo/main.cpp:3957
 msgid "Keyboard Shortcuts"
 msgstr "Tastatursnarveier"
 
-#: demo/main.cpp:179
+#: demo/main.cpp:3958
 msgid "About Blind Sight"
 msgstr "Om Blind Sight"
+
+#: demo/main.cpp:3979
+msgid "Show Protocol"
+msgstr "Vis protokoll"
+
+#: demo/main.cpp:4002
+msgid "Mute All Microphones"
+msgstr "Demp alle mikrofoner"
+
+#: demo/main.cpp:4016
+msgid "Mute All Speakers"
+msgstr "Demp alle høyttalere"
+
+#: demo/main.cpp:4035
+msgid "Monitor…"
+msgstr "Medhør…"
+
+#: demo/main.cpp:4055
+msgid "Record"
+msgstr "Ta opp"
+
+#: demo/main.cpp:4059
+msgid "Play"
+msgstr "Spill av"
+
+#: demo/main.cpp:4063
+msgid "Stop"
+msgstr "Stopp"
+
+#: demo/main.cpp:4158 demo/main.cpp:6005 demo/main.cpp:6019
+msgid "No active projects"
+msgstr "Ingen aktive prosjekter"
+
+#: demo/main.cpp:4173 demo/main.cpp:4188 demo/textures.cpp:357
+msgid "No image"
+msgstr "Ingen bilde"
+
+#: demo/main.cpp:4177 demo/main.cpp:4189 demo/main.cpp:4212
+msgid "No active images"
+msgstr "Ingen aktive bilder"
+
+#: demo/main.cpp:4236
+msgid "Previous"
+msgstr "Forrige"
+
+#: demo/main.cpp:4458 demo/main.cpp:5722 demo/main.cpp:5731
+msgid "No active tracks"
+msgstr "Ingen aktive spor"
+
+#: demo/main.cpp:4479
+msgid "Edit Tracks…"
+msgstr "Rediger spor…"
+
+#: demo/main.cpp:4493 demo/track_dialogs.cpp:127
+msgid "Track Note"
+msgstr "Spornotat"
+
+#: demo/main.cpp:4618 demo/track_dialogs.cpp:279
+msgid "Track %1 – %2 (%3:%4)"
+msgstr "Spor %1 – %2 (%3:%4)"
+
+#: demo/main.cpp:4621 demo/track_dialogs.cpp:281
+msgid "Track %1 (%2:%3)"
+msgstr "Spor %1 (%2:%3)"
+
+#: demo/main.cpp:4887
+msgid "No test step has been recorded yet at this position."
+msgstr "Ingen testtrinn er registrert på dette tidspunktet enda."
+
+#: demo/main.cpp:4912
+msgid "This test step is no longer in protocol.md."
+msgstr "Dette testtrinnet finnes ikke lenger i protocol.md."
+
+#: demo/main.cpp:4940
+msgid "Wait"
+msgstr "Vent"
+
+#: demo/main.cpp:5237 demo/main.cpp:5290
+msgid "No active sessions"
+msgstr "Ingen aktive sesjoner"
+
+#: demo/main.cpp:5308
+msgid "Can't Open Recording"
+msgstr "Kan ikke åpne opptak"
+
+#: demo/main.cpp:5309
+msgid ""
+"This file isn't a recording this version of Blind Sight understands — it may "
+"be corrupted, or written by an incompatible version."
+msgstr ""
+"Denne fila er ikke et opptak denne versjonen av Blind Sight forstår — den "
+"kan være skadet, eller skrevet av en inkompatibel versjon."
+
+#: demo/main.cpp:5329 demo/session_dialogs.cpp:460
+msgid "Open or create a project first — sessions always live inside a project."
+msgstr ""
+"Åpne eller opprett et prosjekt først — sesjoner finnes alltid inne i et "
+"prosjekt."
+
+#: demo/main.cpp:5869
+msgid "That image doesn't occur in this recording"
+msgstr "Det bildet forekommer ikke i dette opptaket"
+
+#: demo/main.cpp:6010
+msgid "Untitled Project"
+msgstr "Prosjekt uten navn"
+
+#: demo/main.cpp:6074
+msgid "Couldn't Open Project"
+msgstr "Kunne ikke åpne prosjekt"
+
+#: demo/main.cpp:6075
+msgid "No protocol.md found in this folder."
+msgstr "Fant ingen protocol.md i denne mappen."
+
+#: demo/main.cpp:6376
+msgid "Test Protocol Complete"
+msgstr "Testprotokoll fullført"
+
+#: demo/main.cpp:6377
+msgid "Every scenario in this protocol has been completed."
+msgstr "Alle scenarioene i denne protokollen er fullført."
+
+#: demo/main.cpp:6424 demo/session_dialogs.cpp:444
+msgid "Can't open recording — wrong or corrupted format"
+msgstr "Kan ikke åpne opptaket — feil eller korrupt format"
+
+#: demo/main.cpp:6600
+msgid ""
+"Open or create a project first — the protocol always lives inside a project."
+msgstr ""
+"Åpne eller opprett et prosjekt først — protokollen finnes alltid inne i et "
+"prosjekt."
+
+#: demo/main.cpp:6613
+msgid "Protocol reconciled"
+msgstr "Protokollen er avstemt"
+
+#: demo/main.cpp:6943
+msgid "Vertical panning disabled for panorama"
+msgstr "Vertikal panorering er slått av for panorama"
+
+#: demo/main.cpp:7284
+msgid "Lost contact with Surface Dial"
+msgstr "Mistet kontakt med Surface Dial"
+
+#: demo/monitoring_dialogs.cpp:79 demo/preferences.cpp:1545
+msgid "Ambient Speaker"
+msgstr "Ambient høyttaler"
+
+#: demo/monitoring_dialogs.cpp:82 demo/preferences.cpp:1544
+msgid "Ambient Microphone"
+msgstr "Ambient mikrofon"
+
+#: demo/monitoring_dialogs.cpp:85
+msgid "Synthesized"
+msgstr "Syntetisert"
+
+#: demo/monitoring_dialogs.cpp:508
+msgid ""
+"%1 is currently using this device. Continuing will disconnect it from %1."
+msgstr "%1 bruker denne enheten nå. Fortsetter du, kobles den fra %1."
+
+#: demo/monitoring_dialogs.cpp:510
+msgid "Reassign Device?"
+msgstr "Tilordne enheten på nytt?"
+
+#: demo/monitoring_dialogs.cpp:512 demo/session_dialogs.cpp:360
+msgid "Continue"
+msgstr "Fortsett"
+
+#: demo/monitoring_dialogs.cpp:576
+msgid ""
+"%1 can only be used as a microphone in handsfree mode, which reduces the "
+"sound quality in both directions — including what you hear. If not, the "
+"ambient microphone is used for you. Use it as your microphone anyway?"
+msgstr ""
+"%1 kan bare brukes som mikrofon i handsfree-modus, som reduserer "
+"lydkvaliteten begge veier — også det du hører. Ellers brukes ambient "
+"mikrofon for deg. Bruke den som mikrofon likevel?"
+
+#: demo/monitoring_dialogs.cpp:580
+msgid "%1 can also be used as your %2. Assign it there too?"
+msgstr "%1 kan også brukes som din %2. Tilordne den der også?"
+
+#: demo/monitoring_dialogs.cpp:582
+msgid "microphone"
+msgstr "mikrofon"
+
+#: demo/monitoring_dialogs.cpp:582
+msgid "listening device"
+msgstr "lytteenhet"
+
+#: demo/monitoring_dialogs.cpp:584
+msgid "Also Use as Microphone?"
+msgstr "Bruke også som mikrofon?"
+
+#: demo/monitoring_dialogs.cpp:584
+msgid "Also Use as Listening Device?"
+msgstr "Bruke også som lytteenhet?"
+
+#: demo/monitoring_dialogs.cpp:586
+msgid "No"
+msgstr "Nei"
+
+#: demo/monitoring_dialogs.cpp:587
+msgid "Yes"
+msgstr "Ja"
+
+#: demo/monitoring_dialogs.cpp:646
+msgid "%1 dB"
+msgstr "%1 dB"
+
+#: demo/monitoring_dialogs.cpp:685 demo/preferences.cpp:1502
+msgid "Input (Microphone)"
+msgstr "Inngang (mikrofon)"
+
+#: demo/monitoring_dialogs.cpp:685 demo/preferences.cpp:1502
+msgid "Output (Speaker)"
+msgstr "Utgang (høyttaler)"
+
+#: demo/monitoring_dialogs.cpp:686
+msgid "None (use Ambient)"
+msgstr "Ingen (bruk ambient)"
+
+#: demo/monitoring_dialogs.cpp:702 demo/preferences.cpp:586
+msgid "Voice Levelling"
+msgstr "Stemmejustering"
+
+#: demo/monitoring_dialogs.cpp:704
+msgid "Slowly evens out how loud this microphone sounds"
+msgstr "Jevner langsomt ut hvor høyt denne mikrofonen låter"
+
+#: demo/monitoring_dialogs.cpp:731
+msgid "Voice Volume"
+msgstr "Stemmevolum"
+
+#: demo/monitoring_dialogs.cpp:744
+msgid "Synthesized Volume"
+msgstr "Syntetisert volum"
+
+#: demo/monitoring_dialogs.cpp:755
+msgid "Participants Volume"
+msgstr "Deltakervolum"
+
+#: demo/monitoring_dialogs.cpp:1003
+msgid "No device assigned"
+msgstr "Ingen enhet tilordnet"
+
+#: demo/monitoring_dialogs.cpp:1005
+msgid "Assigned device is disconnected"
+msgstr "Den tilordnede enheten er frakoblet"
+
+#: demo/monitoring_dialogs.cpp:1006
+msgid "Device is muted"
+msgstr "Enheten er dempet"
+
+#: demo/monitoring_dialogs.cpp:1007
+msgid "Device is unmuted"
+msgstr "Enheten er ikke dempet"
+
+#: demo/monitoring_dialogs.cpp:1008
+msgid "%1 — %2"
+msgstr "%1 — %2"
+
+#: demo/monitoring_dialogs.cpp:1359
+msgid "Whether %1 hears %2"
+msgstr "Om %1 hører %2"
+
+#: demo/preferences.cpp:256
+msgid "Autoload"
+msgstr "Last inn automatisk"
+
+#: demo/preferences.cpp:259
+msgid ""
+"What reopens automatically at launch — turn these off to start with nothing "
+"from a previous session exposed"
+msgstr ""
+"Hva som åpnes automatisk ved oppstart — slå av disse for å starte uten at "
+"noe fra en tidligere sesjon vises"
+
+#: demo/preferences.cpp:264
+msgid "Project"
+msgstr "Prosjekt"
+
+#: demo/preferences.cpp:271
+msgid "Session"
+msgstr "Sesjon"
+
+#: demo/preferences.cpp:278
+msgid "Image"
+msgstr "Bilde"
+
+#: demo/preferences.cpp:286
+msgid "Gaze Cursor"
+msgstr "Blikk-peker"
+
+#: demo/preferences.cpp:290
+msgid "Viewing Distance (cm)"
+msgstr "Synsavstand (cm)"
+
+#: demo/preferences.cpp:293
+msgid ""
+"How far you sit from the screen — sizes the gaze cursor to match your actual "
+"field of view"
+msgstr ""
+"Hvor langt unna skjermen du sitter — bestemmer størrelsen på blikk-pekeren "
+"slik at den matcher ditt faktiske synsfelt"
+
+#: demo/preferences.cpp:321
+msgid "Pointer Fixation Time (ms)"
+msgstr "Fikseringstid for peker (ms)"
+
+#: demo/preferences.cpp:324
+msgid "How long the mouse pointer must rest before it prods where it stopped"
+msgstr "Hvor lenge musepekeren må hvile før den prodder der den stoppet"
+
+#: demo/preferences.cpp:341
+msgid "Prod Cue"
+msgstr "Prodmarkør"
+
+#: demo/preferences.cpp:345
+msgid "Duration (ms)"
+msgstr "Varighet (ms)"
+
+#: demo/preferences.cpp:348
+msgid "How long the glow shown at a prod (click) takes to fade out"
+msgstr "Hvor lang tid gløden som vises ved en prod (klikk) bruker på å tone ut"
+
+#: demo/preferences.cpp:360
+msgid "Size (× gaze cursor)"
+msgstr "Størrelse (× blikk-peker)"
+
+#: demo/preferences.cpp:363
+msgid "Glow diameter, as a multiple of the gaze cursor's own diameter"
+msgstr "Glødens diameter, som et multiplum av blikk-pekerens egen diameter"
+
+#: demo/preferences.cpp:376
+msgid "Peak Opacity (%)"
+msgstr "Maks opasitet (%)"
+
+#: demo/preferences.cpp:379
+msgid ""
+"How strong the glow's center is the moment it appears — it always fades to "
+"fully transparent at its own edge regardless"
+msgstr ""
+"Hvor sterkt glødens senter er i det øyeblikket den vises — den toner uansett "
+"alltid ut til helt gjennomsiktig ved sin egen kant"
+
+#: demo/preferences.cpp:394
+msgid "Head-Prod Sweep Step (ms)"
+msgstr "Sveipsteg for hodeprod (ms)"
+
+#: demo/preferences.cpp:397
+msgid ""
+"Delay between each 5° step of a head-prod's elevation sweep (-25° to +15°) — "
+"0 fires the whole sequence at once"
+msgstr ""
+"Forsinkelse mellom hvert 5°-steg i elevasjonssveipet til en hodeprod (-25° "
+"til +15°) — 0 sender hele sekvensen på én gang"
+
+#: demo/preferences.cpp:417
+msgid "Viewport Navigation"
+msgstr "Navigering i synsfeltet"
+
+#: demo/preferences.cpp:421
+msgid "Traditional"
+msgstr "Tradisjonell"
+
+#: demo/preferences.cpp:424
+msgid ""
+"Arrow keys move the viewport — new content enters from the direction pressed"
+msgstr ""
+"Piltastene beveger synsfeltet — nytt innhold kommer inn fra retningen som "
+"trykkes"
+
+#: demo/preferences.cpp:428
+msgid "Natural"
+msgstr "Naturlig"
+
+#: demo/preferences.cpp:431
+msgid ""
+"Arrow keys move the content — as if dragging the image in the direction "
+"pressed"
+msgstr ""
+"Piltastene beveger innholdet — som om bildet dras i retningen som trykkes"
+
+#: demo/preferences.cpp:478
+msgid "Panning Input"
+msgstr "Panorerings-input"
+
+#: demo/preferences.cpp:546
+msgid "Horizontal Panning (Yaw)"
+msgstr "Horisontal panorering (yaw)"
+
+#: demo/preferences.cpp:547
+msgid ""
+"Extra input for turning left/right, alongside arrow keys — only options "
+"tested on real hardware are listed"
+msgstr ""
+"Ekstra input for å snu venstre/høyre, i tillegg til piltastene — bare "
+"metoder testet på ekte maskinvare er listet"
+
+#: demo/preferences.cpp:550 demo/preferences.cpp:560 demo/preferences.cpp:1492
+#: demo/preferences.cpp:1502
+msgid "None"
+msgstr "Ingen"
+
+#: demo/preferences.cpp:551 demo/preferences.cpp:560
+msgid "Mouse Scroll Wheel"
+msgstr "Musas scrollehjul"
+
+#: demo/preferences.cpp:552
+msgid "Surface Dial"
+msgstr "Surface Dial"
+
+#: demo/preferences.cpp:556
+msgid "Vertical Panning (Tilt)"
+msgstr "Vertikal panorering (tilt)"
+
+#: demo/preferences.cpp:557
+msgid ""
+"Extra input for turning up/down, alongside arrow keys — only options tested "
+"on real hardware are listed"
+msgstr ""
+"Ekstra input for å snu opp/ned, i tillegg til piltastene — bare metoder "
+"testet på ekte maskinvare er listet"
+
+#: demo/preferences.cpp:569
+msgid "Microphone"
+msgstr "Mikrofon"
+
+#: demo/preferences.cpp:573
+msgid "Microphone Initially On"
+msgstr "Mikrofon på fra start"
+
+#: demo/preferences.cpp:576
+msgid ""
+"Whether Record's microphone starts on when opened — it can always be toggled "
+"during a session"
+msgstr ""
+"Om Opptak sin mikrofon starter på når den åpnes — den kan uansett slås av og "
+"på underveis i en sesjon"
+
+#: demo/preferences.cpp:588
+msgid "A slow automatic gain control on every microphone, before its volume"
+msgstr "En langsom automatisk nivåkontroll på hver mikrofon, før volumet"
+
+#: demo/preferences.cpp:610
+msgid "Target Level (dBFS)"
+msgstr "Målnivå (dBFS)"
+
+#: demo/preferences.cpp:611
+msgid "Speech level aimed for; −23 matches the EBU R 128 loudness target"
+msgstr "Talenivået det siktes mot; −23 tilsvarer lydstyrkemålet i EBU R 128"
+
+#: demo/preferences.cpp:613 demo/preferences.cpp:1282
+msgid "Attack (ms)"
+msgstr "Attack (ms)"
+
+#: demo/preferences.cpp:614
+msgid "How quickly a loud speaker is turned down"
+msgstr "Hvor raskt en høylytt taler skrus ned"
+
+#: demo/preferences.cpp:615 demo/preferences.cpp:1298
+msgid "Release (ms)"
+msgstr "Release (ms)"
+
+#: demo/preferences.cpp:616
+msgid "How quickly a quiet speaker is turned up"
+msgstr "Hvor raskt en stille taler skrus opp"
+
+#: demo/preferences.cpp:617
+msgid "Maximum Gain (dB)"
+msgstr "Maks forsterkning (dB)"
+
+#: demo/preferences.cpp:618
+msgid "The most a speaker is raised or lowered"
+msgstr "Det meste en taler heves eller senkes"
+
+#: demo/preferences.cpp:623
+msgid "Speaker"
+msgstr "Høyttaler"
+
+#: demo/preferences.cpp:627
+msgid "Speaker Initially On"
+msgstr "Høyttaler på fra start"
+
+#: demo/preferences.cpp:630
+msgid ""
+"Whether Playback's speaker starts on when opened — it can always be toggled "
+"during a session"
+msgstr ""
+"Om Avspilling sin høyttaler starter på når den åpnes — den kan uansett slås "
+"av og på underveis i en sesjon"
+
+#: demo/preferences.cpp:642
+msgid "Audio Processing"
+msgstr "Lydbehandling"
+
+#: demo/preferences.cpp:646
+msgid "Transcode Audio to Opus"
+msgstr "Omkod lyd til Opus"
+
+#: demo/preferences.cpp:652
+msgid ""
+"Recordings are transcoded to Opus automatically once Stop is pressed — turn "
+"off to leave recordings as WAV instead"
+msgstr ""
+"Opptak omkodes automatisk til Opus når Stopp trykkes — slå av for å beholde "
+"opptakene som WAV"
+
+#: demo/preferences.cpp:655 demo/preferences.cpp:793 demo/preferences.cpp:1112
+msgid " (Libraries are missing)"
+msgstr " (Bibliotekene mangler)"
+
+#: demo/preferences.cpp:701
+msgid "Opus Encoding Not Available"
+msgstr "Opus-enkoding ikke tilgjengelig"
+
+#: demo/preferences.cpp:702
+msgid ""
+"This GStreamer installation doesn't include Opus support (opusenc/oggmux). "
+"On Debian/Ubuntu-based distributions, install it with the command below, "
+"then press Ok. Restarting the app afterwards shouldn't be necessary, but try "
+"it if the setting still won't turn on."
+msgstr ""
+"Denne GStreamer-installasjonen har ikke Opus-støtte (opusenc/oggmux). På "
+"Debian/Ubuntu-baserte distribusjoner installerer du den med kommandoen "
+"under, og trykker deretter OK. Det skal ikke være nødvendig å starte appen "
+"på nytt etterpå, men prøv det hvis innstillingen fortsatt ikke vil slås på."
+
+#: demo/preferences.cpp:716 demo/preferences.cpp:1148
+#: demo/transcription.cpp:343 demo/transcription.cpp:511
+msgid "Ok"
+msgstr "OK"
+
+#: demo/preferences.cpp:784
+msgid "Transcribe Recordings"
+msgstr "Transkriber opptak"
+
+#: demo/preferences.cpp:790
+msgid ""
+"Recorded speech is transcribed automatically once Stop is pressed — turn off "
+"to skip transcription entirely"
+msgstr ""
+"Innspilt tale transkriberes automatisk når Stopp trykkes — slå av for å "
+"hoppe over transkripsjon helt"
+
+#: demo/preferences.cpp:795
+msgid " (Model is missing)"
+msgstr " (Modellen mangler)"
+
+#: demo/preferences.cpp:857
+msgid "Transcription Model Size"
+msgstr "Modellstørrelse for transkripsjon"
+
+#: demo/preferences.cpp:858
+msgid ""
+"Bigger models transcribe more accurately, especially outside English, but "
+"need more GPU memory and are slower"
+msgstr ""
+"Større modeller transkriberer mer nøyaktig, særlig utenfor engelsk, men "
+"trenger mer GPU-minne og er tregere"
+
+#: demo/preferences.cpp:861 demo/preferences.cpp:1091
+msgid "Small"
+msgstr "Small"
+
+#: demo/preferences.cpp:861
+msgid "Medium"
+msgstr "Medium"
+
+#: demo/preferences.cpp:861
+msgid "Large-v3"
+msgstr "Large-v3"
+
+#: demo/preferences.cpp:874
+msgid "Diarize Recordings"
+msgstr "Diariser opptak"
+
+#: demo/preferences.cpp:877
+msgid ""
+"Separates the speakers in the transcript (speaker 1, speaker 2, …) without "
+"identifying who they are — needs a one-time HuggingFace setup the first time "
+"this is turned on"
+msgstr ""
+"Skiller talerne fra hverandre i transkripsjonen (taler 1, taler 2 …) uten å "
+"identifisere hvem de er — krever et engangsoppsett hos HuggingFace første "
+"gang dette slås på"
+
+#: demo/preferences.cpp:950
+msgid "Transcription Languages"
+msgstr "Transkripsjonsspråk"
+
+#: demo/preferences.cpp:953
+msgid ""
+"Avoids a download interrupting a test — Whisper works without these too."
+msgstr ""
+"Unngår at en nedlasting avbryter en test — Whisper virker også uten disse."
+
+#: demo/preferences.cpp:964
+msgid "All Languages"
+msgstr "Alle språk"
+
+#: demo/preferences.cpp:1029
+msgid "Depth Generation"
+msgstr "Dybdegenerering"
+
+#: demo/preferences.cpp:1033
+msgid "Generate Depth Maps"
+msgstr "Generer dybdekart"
+
+#: demo/preferences.cpp:1036
+msgid ""
+"Images without a depth map get one generated automatically when opened — "
+"turning this on downloads the model right away, not on first use"
+msgstr ""
+"Bilder uten dybdekart får et generert automatisk når de åpnes — slår du "
+"dette på, lastes modellen ned med en gang, ikke ved første bruk"
+
+#: demo/preferences.cpp:1063
+msgid "Run this from a terminal, then turn this back on."
+msgstr "Kjør dette fra en terminal, og slå så dette på igjen."
+
+#: demo/preferences.cpp:1086
+msgid "Depth Model Size"
+msgstr "Modellstørrelse for dybde"
+
+#: demo/preferences.cpp:1087
+msgid ""
+"Bigger models are more accurate but slower and need more memory — depth "
+"generation often runs on CPU, so this matters even without a GPU"
+msgstr ""
+"Større modeller er mer nøyaktige, men tregere og trenger mer minne — "
+"dybdegenerering kjører ofte på CPU, så dette betyr noe selv uten GPU"
+
+#: demo/preferences.cpp:1091
+msgid "Base"
+msgstr "Base"
+
+#: demo/preferences.cpp:1091
+msgid "Large"
+msgstr "Large"
+
+#: demo/preferences.cpp:1106
+msgid "Use Fiducial Markers"
+msgstr "Bruk referansemarkører"
+
+#: demo/preferences.cpp:1109
+msgid ""
+"Anchors generated depth to real-world distance using ArUco reference markers "
+"placed in the scene"
+msgstr ""
+"Forankrer generert dybde til reell avstand ved hjelp av ArUco-"
+"referansemarkører plassert i scenen"
+
+#: demo/preferences.cpp:1136
+msgid "ArUco Detection Not Available"
+msgstr "ArUco-gjenkjenning ikke tilgjengelig"
+
+#: demo/preferences.cpp:1137
+msgid ""
+"The depth environment doesn't have OpenCV installed yet. Install it with the "
+"command below, then press Ok."
+msgstr ""
+"Dybdemiljøet har ikke OpenCV installert ennå. Installer det med kommandoen "
+"under, og trykk deretter OK."
+
+#: demo/preferences.cpp:1223
+msgid "Point Data"
+msgstr "Punktdata"
+
+#: demo/preferences.cpp:1227
+msgid "Show Point Data"
+msgstr "Vis punktdata"
+
+#: demo/preferences.cpp:1230
+msgid ""
+"A small readout in the content's bottom-right corner, showing data for "
+"whatever point the pointer is over — azimuth, elevation, and depth for now"
+msgstr ""
+"En liten avlesning i innholdets nedre høyre hjørne, med data for punktet "
+"pekeren står over — foreløpig asimut, elevasjon og dybde"
+
+#: demo/preferences.cpp:1244
+msgid "Distance Estimate"
+msgstr "Avstandsestimat"
+
+#: demo/preferences.cpp:1246
+msgid "Averaging Grid"
+msgstr "Midlingsrutenett"
+
+#: demo/preferences.cpp:1247
+msgid ""
+"How many depth samples (in a square grid around the prod's own position) are "
+"averaged into its distance estimate"
+msgstr ""
+"Hvor mange dybdeprøver (i et kvadratisk rutenett rundt prodens egen "
+"posisjon) som midles til avstandsestimatet"
+
+#: demo/preferences.cpp:1250
+msgid "1 (single point)"
+msgstr "1 (enkeltpunkt)"
+
+#: demo/preferences.cpp:1251
+msgid "4 (2×2)"
+msgstr "4 (2×2)"
+
+#: demo/preferences.cpp:1252
+msgid "9 (3×3)"
+msgstr "9 (3×3)"
+
+#: demo/preferences.cpp:1253
+msgid "16 (4×4)"
+msgstr "16 (4×4)"
+
+#: demo/preferences.cpp:1254
+msgid "25 (5×5)"
+msgstr "25 (5×5)"
+
+#: demo/preferences.cpp:1263
+msgid "Noise Pulse"
+msgstr "Støypuls"
+
+#: demo/preferences.cpp:1283
+msgid "Time to reach full volume from the moment a prod fires"
+msgstr "Tid fra en prod utløses til fullt volum er nådd"
+
+#: demo/preferences.cpp:1285
+msgid "Decay (ms)"
+msgstr "Decay (ms)"
+
+#: demo/preferences.cpp:1286
+msgid "Time to fall from full volume to the sustain level"
+msgstr "Tid fra fullt volum og ned til sustain-nivået"
+
+#: demo/preferences.cpp:1288
+msgid "Sustain Level (%)"
+msgstr "Sustain-nivå (%)"
+
+#: demo/preferences.cpp:1289
+msgid "The level held during the sustain phase"
+msgstr "Nivået som holdes i sustain-fasen"
+
+#: demo/preferences.cpp:1292
+msgid "Sustain Duration (ms)"
+msgstr "Sustain-varighet (ms)"
+
+#: demo/preferences.cpp:1293
+msgid ""
+"How long the sustain level is held before Release begins — a prod has no "
+"held/released gesture for classic ADSR's own Sustain to last \"as long as\""
+msgstr ""
+"Hvor lenge sustain-nivået holdes før release starter — en prod har ingen "
+"trykk-og-slipp-bevegelse som klassisk ADSR-sustain kan vare «så lenge som»"
+
+#: demo/preferences.cpp:1299
+msgid "Time to fade to silence after the sustain phase ends"
+msgstr "Tid for å tone ut til stillhet etter at sustain-fasen er slutt"
+
+#: demo/preferences.cpp:1302
+msgid "Color (%)"
+msgstr "Farge (%)"
+
+#: demo/preferences.cpp:1303
+msgid ""
+"Brightness of the underlying noise — 0 is dark/filtered, 100 is bright/"
+"unfiltered white noise"
+msgstr ""
+"Hvor lys den underliggende støyen er — 0 er mørk/filtrert, 100 er lys/"
+"ufiltrert hvit støy"
+
+#: demo/preferences.cpp:1306
+msgid "Gain (%)"
+msgstr "Forsterkning (%)"
+
+#: demo/preferences.cpp:1306
+msgid "Overall loudness of the pulse"
+msgstr "Pulsens samlede lydstyrke"
+
+#: demo/preferences.cpp:1315
+msgid "Max Echo Delay (ms)"
+msgstr "Maks ekkoforsinkelse (ms)"
+
+#: demo/preferences.cpp:1318
+msgid ""
+"Ceiling on the distance-based delay before a prod's sound plays — see the "
+"toggle below for what happens past it"
+msgstr ""
+"Øvre grense for den avstandsbaserte forsinkelsen før lyden fra en prod "
+"spilles — se bryteren under for hva som skjer utover den"
+
+#: demo/preferences.cpp:1333
+msgid "Max Delay Means No Data"
+msgstr "Maks forsinkelse betyr ingen data"
+
+#: demo/preferences.cpp:1336
+msgid ""
+"On: past the max delay, play nothing — the depth reading wasn't reliable, "
+"not genuinely that far away. Off: clamp to the max delay and play it anyway"
+msgstr ""
+"På: forbi maks forsinkelse spilles ingenting — dybdeavlesningen var ikke "
+"pålitelig, ikke egentlig så langt unna. Av: begrens til maks forsinkelse og "
+"spill den likevel"
+
+#: demo/preferences.cpp:1355
+msgid "Preferred Bigrams"
+msgstr "Foretrukne bigrammer"
+
+#: demo/preferences.cpp:1358
+msgid ""
+"Pin the two-letter label a name gets in the monitoring matrix — normally "
+"just your own full name, so your own header stays the same across sessions"
+msgstr ""
+"Lås merket på to bokstaver som et navn får i medhørsmatrisen — vanligvis "
+"bare ditt eget fulle navn, slik at din egen overskrift er den samme fra "
+"sesjon til sesjon"
+
+#: demo/preferences.cpp:1410
+msgid "Full name"
+msgstr "Fullt navn"
+
+#: demo/preferences.cpp:1415
+msgid "Bigram"
+msgstr "Bigram"
+
+#: demo/preferences.cpp:1446
+msgid "Add"
+msgstr "Legg til"
+
+#: demo/preferences.cpp:1470
+msgid "Preferred Devices"
+msgstr "Foretrukne enheter"
+
+#: demo/preferences.cpp:1473
+msgid ""
+"A starting device for Ambient Microphone, Ambient Speaker, and every name "
+"above — pre-fills the monitoring matrix's own assignment at the start of a "
+"session, but stays freely overridable there. Leave a field as “None” to "
+"assign that device by hand each session instead."
+msgstr ""
+"En startenhet for Ambient mikrofon, Ambient høyttaler og hvert navn over — "
+"fyller ut tilordningen i medhørsmatrisen ved starten av en sesjon, men kan "
+"fritt overstyres der. La et felt stå som «Ingen» for i stedet å tilordne "
+"enheten for hånd i hver sesjon."
+
+#: demo/project_dialogs.cpp:153
+msgid "New Project"
+msgstr "Nytt prosjekt"
+
+#: demo/project_dialogs.cpp:167
+msgid "Create"
+msgstr "Opprett"
+
+#: demo/project_dialogs.cpp:173
+msgid "Project Name"
+msgstr "Prosjektnavn"
+
+#: demo/project_dialogs.cpp:178
+msgid "No folder chosen"
+msgstr "Ingen mappe valgt"
+
+#: demo/project_dialogs.cpp:179
+msgid "Choose…"
+msgstr "Velg…"
+
+#: demo/project_dialogs.cpp:195
+msgid "Choose Parent Folder"
+msgstr "Velg overordnet mappe"
+
+#: demo/project_dialogs.cpp:229 demo/project_dialogs.cpp:237
+msgid "Couldn't Create Project"
+msgstr "Kunne ikke opprette prosjekt"
+
+#: demo/project_dialogs.cpp:230
+msgid "The project folder couldn't be created."
+msgstr "Prosjektmappen kunne ikke opprettes."
+
+#: demo/project_dialogs.cpp:238
+msgid "protocol.md couldn't be written."
+msgstr "protocol.md kunne ikke skrives."
+
+#: demo/project_dialogs.cpp:258
+msgid "Open Project"
+msgstr "Åpne prosjekt"
+
+#: demo/project_dialogs.cpp:288
+msgid "Projects"
+msgstr "Prosjekter"
+
+#: demo/project_dialogs.cpp:299 demo/project_dialogs.cpp:416
+msgid "New Project…"
+msgstr "Nytt prosjekt…"
+
+#: demo/project_dialogs.cpp:304 demo/project_dialogs.cpp:421
+msgid "Open Project…"
+msgstr "Åpne prosjekt…"
+
+#: demo/project_dialogs.cpp:309
+msgid "Remove from list"
+msgstr "Fjern fra listen"
+
+#: demo/project_dialogs.cpp:332 demo/project_dialogs.cpp:431
+msgid "Project Details"
+msgstr "Prosjektdetaljer"
+
+#: demo/project_dialogs.cpp:348 demo/session_dialogs.cpp:336
+msgid "Description"
+msgstr "Beskrivelse"
+
+#: demo/project_dialogs.cpp:460
+msgid ""
+"protocol.md was changed by something else while this dialog was open — your "
+"edit was not saved. Reopen and try again."
+msgstr ""
+"protocol.md ble endret av noe annet mens denne dialogen var åpen — endringen "
+"din ble ikke lagret. Åpne på nytt og prøv igjen."
+
+#: demo/session_dialogs.cpp:126
+msgid "No Session"
+msgstr "Ingen sesjon"
+
+#: demo/session_dialogs.cpp:172
+msgid "Sessions"
+msgstr "Sesjoner"
+
+#: demo/session_dialogs.cpp:190 demo/session_dialogs.cpp:449
+msgid "New Session"
+msgstr "Ny sesjon"
+
+#: demo/session_dialogs.cpp:226
+msgid "Delete Session"
+msgstr "Slett sesjon"
+
+#: demo/session_dialogs.cpp:239
+msgid ""
+"“%1” and every recording in it will be permanently deleted. This can't be "
+"undone."
+msgstr ""
+"«%1» og alle opptak i den vil bli slettet for godt. Dette kan ikke gjøres om."
+
+#: demo/session_dialogs.cpp:242
+msgid "Delete Session?"
+msgstr "Slette sesjon?"
+
+#: demo/session_dialogs.cpp:275
+msgid "Recording Details"
+msgstr "Opptaksdetaljer"
+
+#: demo/session_dialogs.cpp:302
+msgid "Contributor"
+msgstr "Bidragsyter"
+
+#: demo/session_dialogs.cpp:308
+msgid "Date"
+msgstr "Dato"
+
+#: demo/session_dialogs.cpp:317
+msgid "Rights (e.g. Confidential, Anonymize)"
+msgstr "Rettigheter (f.eks. fortrolig, anonymiseres)"
+
+#: demo/session_dialogs.cpp:474
+msgid "Session Details"
+msgstr "Sesjonsdetaljer"
+
+#: demo/session_dialogs.cpp:502
+msgid ""
+"This session file was changed by something else while this dialog was open — "
+"your edit was not saved. Reopen and try again."
+msgstr ""
+"Denne sesjonsfila ble endret av noe annet mens denne dialogen var åpen — "
+"endringen din ble ikke lagret. Åpne på nytt og prøv igjen."
+
+#: demo/trace_delay.cpp:64 demo/trace_delay.cpp:175 demo/trace_delay.cpp:187
+#: demo/trace_delay.cpp:196
+msgid "Trace Sound Delay Failed"
+msgstr "Måling av lydforsinkelse mislyktes"
+
+#: demo/trace_delay.cpp:65
+msgid "The measurement didn't produce a usable result."
+msgstr "Målingen ga ikke noe brukbart resultat."
+
+#: demo/trace_delay.cpp:71 demo/trace_delay.cpp:205
+msgid "Trace Sound Delay"
+msgstr "Mål lydforsinkelse"
+
+#: demo/trace_delay.cpp:93
+msgid "Measured Round Trip"
+msgstr "Målt tur–retur"
+
+#: demo/trace_delay.cpp:97
+msgid "Sound Travel Time (from distance)"
+msgstr "Lydens gangtid (fra avstand)"
+
+#: demo/trace_delay.cpp:101
+msgid "Corrected Latency"
+msgstr "Korrigert forsinkelse"
+
+#: demo/trace_delay.cpp:107
+msgid "Unknown"
+msgstr "Ukjent"
+
+#: demo/trace_delay.cpp:108
+msgid "PipeWire's Own Quantum (included above)"
+msgstr "PipeWires eget kvantum (inkludert over)"
+
+#: demo/trace_delay.cpp:112
+msgid "Not Bluetooth, or unknown"
+msgstr "Ikke Bluetooth, eller ukjent"
+
+#: demo/trace_delay.cpp:115
+msgid "low-latency"
+msgstr "lav forsinkelse"
+
+#: demo/trace_delay.cpp:115
+msgid "not low-latency"
+msgstr "ikke lav forsinkelse"
+
+#: demo/trace_delay.cpp:116
+msgid "Output Codec"
+msgstr "Utgangskodek"
+
+#: demo/trace_delay.cpp:124
+msgid ""
+"Microphone capture latency is not isolated by this measurement — it's "
+"included in the corrected latency above, along with the output device's own "
+"latency. If either device is itself a USB audio interface (common even for "
+"\"wired\" speakers/headphones), that includes USB Audio Class buffering, not "
+"just acoustic/DAC delay."
+msgstr ""
+"Mikrofonens opptaksforsinkelse skilles ikke ut av denne målingen — den er "
+"med i den korrigerte forsinkelsen over, sammen med utgangsenhetens egen "
+"forsinkelse. Er en av enhetene selv et USB-lydgrensesnitt (vanlig også for "
+"«kablede» høyttalere/hodetelefoner), inkluderer det bufring i USB Audio "
+"Class, ikke bare akustisk forsinkelse og DAC-forsinkelse."
+
+#: demo/trace_delay.cpp:137
+msgid "Close"
+msgstr "Lukk"
+
+#: demo/trace_delay.cpp:162
+msgid "Measuring delay…"
+msgstr "Måler forsinkelse…"
+
+#: demo/trace_delay.cpp:176
+msgid "The measurement script didn't run successfully."
+msgstr "Måleskriptet kjørte ikke vellykket."
+
+#: demo/trace_delay.cpp:188
+msgid "The measurement script's result couldn't be read."
+msgstr "Resultatet fra måleskriptet kunne ikke leses."
+
+#: demo/trace_delay.cpp:197
+msgid "The measurement script couldn't be started."
+msgstr "Måleskriptet kunne ikke startes."
+
+#: demo/trace_delay.cpp:212
+msgid ""
+"Measures the real round-trip delay from this app to audible sound, by "
+"playing a click and listening for it with the microphone. Needs the distance "
+"between the speaker and the microphone to subtract out sound's own travel "
+"time. Microphone capture latency can't be isolated this way — it stays "
+"folded into the result, and the result dialog says so explicitly."
+msgstr ""
+"Måler den faktiske forsinkelsen tur–retur fra denne appen til hørbar lyd, "
+"ved å spille et klikk og lytte etter det med mikrofonen. Trenger avstanden "
+"mellom høyttaleren og mikrofonen for å trekke fra lydens egen gangtid. "
+"Mikrofonens opptaksforsinkelse kan ikke skilles ut på denne måten — den blir "
+"værende i resultatet, og resultatdialogen sier det eksplisitt."
+
+#: demo/trace_delay.cpp:228
+msgid "Speaker-to-Microphone Distance (cm)"
+msgstr "Avstand høyttaler–mikrofon (cm)"
+
+#: demo/trace_delay.cpp:235
+msgid "Measure"
+msgstr "Mål"
+
+#: demo/track_dialogs.cpp:137
+msgid "Title (Optional)"
+msgstr "Tittel (valgfritt)"
+
+#: demo/track_dialogs.cpp:146 demo/track_dialogs.cpp:321
+msgid "Note"
+msgstr "Notat"
+
+#: demo/track_dialogs.cpp:239
+msgid "Tracks"
+msgstr "Spor"
+
+#: demo/transcription.cpp:328
+msgid "Transcription Model Not Downloaded Yet"
+msgstr "Transkripsjonsmodellen er ikke lastet ned ennå"
+
+#: demo/transcription.cpp:329
+msgid ""
+"Run this to download the transcription model, plus the alignment model for "
+"the language this interface appears to be running in (guessed from your "
+"system's language setting — edit the language code in the command if that's "
+"wrong). Safe to run well ahead of time, even on a different machine or "
+"network than the one you'll actually test on — these can be several GB."
+msgstr ""
+"Kjør dette for å laste ned transkripsjonsmodellen, pluss alignment-modellen "
+"for språket dette grensesnittet ser ut til å bruke (gjettet ut fra "
+"språkinnstillingen i systemet — endre språkkoden i kommandoen hvis det er "
+"feil). Det er trygt å kjøre i god tid på forhånd, også på en annen maskin "
+"eller et annet nettverk enn der du faktisk skal teste — disse kan være flere "
+"GB."
+
+#: demo/transcription.cpp:406
+msgid "Downloading diarization model…"
+msgstr "Laster ned diariseringsmodell…"
+
+#: demo/transcription.cpp:429
+msgid "Diarization Setup Failed"
+msgstr "Oppsett av diarisering mislyktes"
+
+#: demo/transcription.cpp:430
+msgid ""
+"Downloading the diarization model failed — check that all three gated model "
+"licenses were accepted and the token is valid, then try again."
+msgstr ""
+"Nedlastingen av diariseringsmodellen mislyktes — sjekk at lisensene for alle "
+"tre skjermede modeller er godtatt og at tokenet er gyldig, og prøv igjen."
+
+#: demo/transcription.cpp:464
+msgid "Diarization Not Set Up"
+msgstr "Diarisering er ikke satt opp"
+
+#: demo/transcription.cpp:465
+msgid ""
+"Speaker labeling needs a one-time HuggingFace setup:\n"
+"\n"
+"1. Create a free HuggingFace account, if you don't have one (link below).\n"
+"2. Visit these three pages and accept the license on each — all three are "
+"required (links below).\n"
+"3. Create an access token (link below) — a \"Read\" token, or a fine-grained "
+"token with \"Read access to contents of all public gated repos you can "
+"access\" checked.\n"
+"4. Run this command below. When it asks for a password, that is where you "
+"paste the token — not your account or login password."
+msgstr ""
+"Diarisering krever et engangsoppsett hos HuggingFace:\n"
+"\n"
+"1. Opprett en gratis HuggingFace-konto hvis du ikke har en (lenke under).\n"
+"2. Gå til disse tre sidene og godta lisensen på hver — alle tre er påkrevd "
+"(lenker under).\n"
+"3. Opprett et tilgangstoken (lenke under) — et «Read»-token, eller et "
+"finkornet token med «Read access to contents of all public gated repos you "
+"can access» avkrysset.\n"
+"4. Kjør kommandoen under. Når den ber om et passord, er det der du limer inn "
+"tokenet — ikke passordet til kontoen eller innloggingen din."
+
+#: demo/transcription.cpp:630
+msgid "Downloading"
+msgstr "Laster ned"
+
+#: demo/transcription.cpp:725
+msgid "Languages"
+msgstr "Språk"
+
+#: demo/transcription.cpp:743
+msgid "Update"
+msgstr "Oppdater"
+
+#: demo/transcription.cpp:749
+msgid "Filter…"
+msgstr "Filtrer…"
+
+#: demo/transcription.cpp:781
+msgid "Has an alignment model"
+msgstr "Har en alignment-modell (tidsstempel per ord)"
+
+#: demo/transcription.cpp:782
+msgid "No alignment model — transcribes without word timing"
+msgstr "Ingen alignment-modell — transkriberer uten tidsstempel per ord"
+
+#: demo/transcription.cpp:870
+msgid "no alignment model — will transcribe without one"
+msgstr "ingen alignment-modell — transkriberer uten"
+
+#: demo/transcription.cpp:922 demo/transcription.cpp:961
+msgid "Can't Install Automatically"
+msgstr "Kan ikke installere automatisk"
+
+#: demo/transcription.cpp:923 demo/transcription.cpp:962
+msgid "You'll need to install this manually — I can't do it automatically."
+msgstr "Du må installere dette manuelt — jeg kan ikke gjøre det automatisk."
+
+#: demo/transcription.cpp:927
+msgid "Installing transcription libraries…"
+msgstr "Installerer transkripsjonsbiblioteker…"
+
+#: demo/transcription.cpp:939
+msgid "Installation Failed"
+msgstr "Installasjonen mislyktes"
+
+#: demo/transcription.cpp:940
+msgid ""
+"Something went wrong installing the transcription libraries — run demo/"
+"transcribe/setup-transcribe-env.sh from a terminal to see what happened."
+msgstr ""
+"Noe gikk galt under installasjonen av transkripsjonsbibliotekene — kjør demo/"
+"transcribe/setup-transcribe-env.sh fra en terminal for å se hva som skjedde."
+
+#: demo/transcription.cpp:983
+msgid "Transcription Libraries Not Set Up"
+msgstr "Transkripsjonsbibliotekene er ikke satt opp"
+
+#: demo/transcription.cpp:984
+msgid ""
+"This installs what's needed to transcribe recorded speech to text — a "
+"separate step from the transcription model itself, which downloads after "
+"this, the first time a recording is actually transcribed. It needs real disk "
+"space — roughly 1–2GB with CPU-only PyTorch, but up to ~5.5GB if a CUDA-"
+"capable GPU is detected. \"Next\" runs the command below automatically, or "
+"run it yourself first if you'd rather:"
+msgstr ""
+"Dette installerer det som trengs for å transkribere innspilt tale til tekst "
+"— et eget steg fra selve transkripsjonsmodellen, som lastes ned etter dette, "
+"første gang et opptak faktisk transkriberes. Det krever en del diskplass — "
+"omtrent 1–2 GB med PyTorch kun for CPU, men opptil ~5,5 GB hvis en CUDA-"
+"kapabel GPU oppdages. «Neste» kjører kommandoen under automatisk, eller du "
+"kan kjøre den selv først om du heller vil:"
+
+#: demo/transcription.cpp:998
+msgid "Dismiss"
+msgstr "Avvis"
+
+#: demo/transcription.cpp:999
+msgid "Next →"
+msgstr "Neste →"
+
+#: demo/transcription.cpp:1131
+msgid "Track"
+msgstr "Spor"
+
+#: demo/transcription.cpp:1138
+msgid "Transcribing"
+msgstr "Transkriberer"
+
+#: demo/transcription.cpp:1194
+msgid "Diarization Failed"
+msgstr "Diarisering mislyktes"
+
+#: demo/transcription.cpp:1195
+msgid ""
+"The transcript was written, but speaker labeling didn't work — the "
+"HuggingFace token may be invalid or expired, or pyannote may have revoked "
+"access to the model. Check Diarize Recordings in Preferences to redo the "
+"setup."
+msgstr ""
+"Transkripsjonen ble skrevet, men diariseringen virket ikke — HuggingFace-"
+"tokenet kan være ugyldig eller utløpt, eller pyannote kan ha trukket tilbake "
+"tilgangen til modellen. Sjekk Diariser opptak i Innstillinger for å gjøre "
+"oppsettet på nytt."
+
+#: demo/transcription.cpp:1213
+msgid "done."
+msgstr "ferdig."
+
+#: demo/transcription.cpp:1257
+msgid "Transcription Not Set Up"
+msgstr "Transkripsjon er ikke satt opp"
+
+#: demo/transcription.cpp:1258
+msgid ""
+"Run this from a terminal — recordings will then get a transcript "
+"automatically."
+msgstr ""
+"Kjør dette fra en terminal — opptak får da en transkripsjon automatisk."

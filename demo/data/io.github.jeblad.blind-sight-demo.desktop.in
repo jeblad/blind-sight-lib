@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Blind Sight
+Comment=Gaze-steered synthetic echo demo for sensory substitution
+Exec=@EXEC_PATH@
+Icon=io.github.jeblad.blind-sight-demo
+Terminal=false
+Categories=Utility;Accessibility;
+StartupWMClass=io.github.jeblad.blind-sight-demo

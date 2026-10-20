@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-only -->
+<schemalist>
+  <schema id="io.github.jeblad.blind-sight-demo" path="/io/github/jeblad/blind-sight-demo/">
+    <!--
+      image-sequence used to live here (John, 2026-10-06: removed —
+      images are now always project-scoped, see images.hpp. The prepared,
+      ordered set of images for a test run, each entry's hidden/visible
+      toggle, and its slug all moved to a project-local images.json;
+      "Import Image(s)…" copies the file into the project instead of
+      just referencing wherever it was picked from).
+    -->
+    <key name="viewing-distance" type="d">
+      <default>0.375</default>
+      <summary>Assumed eye-to-screen viewing distance, in metres</summary>
+      <description>
+        Feeds the gaze cursor's angular sizing (make_gaze_cursor()) — the
+        one input to that calculation that can't be read from the monitor
+        itself. No unit in the key name and no prefix on the value — plain
+        SI (metres), the same convention as everywhere else a persisted
+        quantity has a unit at all. Millimetres and centimetres are purely
+        internal/display concerns (pixel-density math, the Preferences
+        spin row), never a second unit of storage.
+      </description>
+    </key>
+    <key name="traditional-viewport-scroll" type="b">
+      <default>true</default>
+      <summary>Whether arrow keys move the viewport or the content</summary>
+      <description>
+        Same distinction GNOME's own mouse/touchpad settings call
+        "traditional" (true — arrow keys move the viewport itself,
+        bringing content from the arrow's direction into the center) vs.
+        "natural" (false — arrow keys instead drag the content, the
+        opposite sign). Which one reads as "correct" is genuinely a matter
+        of personal preference, not a bug either way — configurable in
+        Preferences, defaulting to traditional.
+      </description>
+    </key>
+    <key name="last-image-folder" type="s">
+      <default>''</default>
+      <summary>Last folder used in the Open Image dialog</summary>
+      <description>
+        Empty string means "no folder remembered yet, use the file
+        dialog's own default." Images usually live in one particular
+        folder, so returning there instead of wherever the dialog last
+        happened to default to saves re-navigating every time.
+      </description>
+    </key>
+    <!--
+      last-session-folder, recent-sessions, max-recent-sessions, and
+      hidden-sessions used to live here (John, 2026-10-05: removed —
+      sessions are now always project-scoped, see sessions.hpp. The
+      session list, its order, and each entry's hidden/visible toggle
+      all moved to a project-local sessions.json; New Session no longer
+      shows a file dialog at all).
+    -->
+    <key name="current-working-session" type="s">
+      <default>''</default>
+      <summary>The session (.bs) file Record/Playback currently work on</summary>
+      <description>
+        John, 2026-09-13: "en delt 'current working session'" — opening a
+        session file in either Record or Playback sets this, and both
+        toasts pick it up automatically the next time either is entered.
+        Empty string means none yet — Forward/Play stay disabled until
+        one is set.
+      </description>
+    </key>
+    <key name="autoload-project" type="b">
+      <default>false</default>
+      <summary>Whether the last-opened project reopens automatically at launch</summary>
+      <description>
+        John, 2026-10-03: "Hvis det ikke er angitt på kommandolinja
+        hvilket prosjekt som skal åpnes, så skal en gsettings-nøkkel
+        sjekkes for om et prosjekt skal autolastes." Gates the existing
+        last-project auto-reopen (on_activate(), main.cpp) — a
+        command-line project argument always wins regardless of this
+        setting, since the user asked for that one explicitly.
+
+        Default flipped to false 2026-10-04 — John: "Å gjenåpne en
+        sesjon når andre testee er tilstede blir et problem... Det kan
+        være aktuelt å bruke autoload når en analyserer sesjoner, men
+        som default må den nok være av." Since autoload-session/
+        autoload-image both already require a project to be active
+        before they do anything (John, 2026-10-03, "De to autoload for
+        image og session forutsetter autoload for prosjektet"), leaving
+        this one off by default is enough on its own to keep a facilitator's
+        previous participant invisible at launch — turning it on is a
+        deliberate opt-in for session analysis work, not something a
+        fresh install exposes by accident.
+      </description>
+    </key>
+    <key name="autoload-session" type="b">
+      <default>false</default>
+      <summary>Whether the current working session reopens automatically at launch</summary>
+      <description>
+        John, 2026-10-03, same request as autoload-project, for the
+        shared session dropdown's own current-working-session auto-load
+        instead. Default flipped to false 2026-10-04, same conversation
+        and reasoning as autoload-project's own — already effectively
+        off by default via that key (this one requires a project to be
+        active first), but set off here too rather than relying on that
+        indirection alone.
+      </description>
+    </key>
+    <key name="autoload-image" type="b">
+      <default>false</default>
+      <summary>Whether the last-viewed image reopens automatically at launch</summary>
+      <description>
+        John, 2026-10-03: "Jeg tror bilde også skal være et flagg, og at
+        vi skal ta vare på current image. Det gjør det enklere for
+        brukeren" — tracks last-image (the actual path), not a fixed
+        index into image-sequence, so it stays meaningful as that list
+        itself is edited. Default flipped to false 2026-10-04, same
+        reasoning as autoload-project/autoload-session's own.
+      </description>
+    </key>
+    <key name="last-image" type="s">
+      <default>''</default>
+      <summary>The image last shown in Interactive/Record, for autoload-image</summary>
+      <description>
+        Updated every time load_image() runs, or the display is cleared
+        back to "no image" — independent of image-sequence membership,
+        since load_image() itself never required the path to be a member
+        of it — any readable file works, in or out of the prepared
+        sequence.
+      </description>
+    </key>
+    <key name="microphone-initially-on" type="b">
+      <default>true</default>
+      <summary>Whether the Record toast's microphone starts on or off</summary>
+      <description>
+        John, 2026-09-13: "en toggle for Microphone initially on og
+        initially off." Either way, the microphone icon in the Record
+        toast can still be clicked to change it for that session — this
+        only decides the state it starts in on entering Record.
+      </description>
+    </key>
+    <key name="speaker-initially-on" type="b">
+      <default>true</default>
+      <summary>Whether the Playback toast's speaker starts on or off</summary>
+      <description>
+        Playback's counterpart to microphone-initially-on (John,
+        2026-09-13: "Under avspilling så skal vi ha et høyttalersymbol.
+        Dette skal ha en tilsvarende oppføring i Innstillinger") — the
+        speaker icon can still be toggled for that session regardless of
+        this default.
+      </description>
+    </key>
+    <key name="transcode-audio-to-opus" type="b">
+      <default>false</default>
+      <summary>Whether recorded WAV segments get auto-transcoded to Opus at Stop</summary>
+      <description>
+        John, 2026-09-13: originally "delete-wav-after-encoding" (default
+        true — encoding always happened, this only decided whether the
+        WAV survived it too). Reworked 2026-09-24 across a few passes:
+        first just a wording fix (encoding always happens; frame it as
+        "we transcode to Opus," with the original going away being an
+        implied consequence, not an announced deletion — "vi sier ikke
+        eksplisitt at vi sletter fila"). Then John clarified the real
+        choice isn't about the WAV's fate at all: "Det er ikke lengre et
+        valg om å beholde WAV-fila, det er et valg om å transkode til
+        Opus" — off means no transcoding happens at all, the WAV is just
+        left as-is; on means every recorded segment gets transcoded to
+        Opus the moment its capture pipeline closes (see
+        stop_audio_track_and_encode()), and the WAV is discarded once
+        that succeeds. A file whose encode fails always keeps its WAV
+        regardless — discarding it then would lose the only copy of that
+        audio — and now also surfaces a plain "couldn't transcode" notice
+        rather than failing silently (John: "Jeg tror ikke vi skal
+        forsøke å analysere årsaken til feilen, for det vil nok bli litt
+        komplekst" — no diagnostics, just the fact that it happened).
+
+        Default flipped to `false` 2026-09-25 (John: "må starte som
+        default Off") — turning it on now runs a real check
+        (opus_encoding_available()) for whether opusenc/oggmux are
+        actually installed, showing a dialog and reverting back to off
+        if not, rather than silently leaving a setting on that can't
+        actually do anything (see show_preferences()'s
+        signal_changed(kTranscodeAudioToOpusKey) handler).
+      </description>
+    </key>
+    <key name="transcribe-audio" type="b">
+      <default>false</default>
+      <summary>Whether recorded speech gets auto-transcribed at Stop</summary>
+      <description>
+        John, 2026-09-25: "Jeg tror vi skal legge på en opsjon i
+        Innstillinger for hvorvidt talere skal transkriberes." Separate
+        from transcode-audio-to-opus — that one is about the audio
+        *format* (Opus vs WAV), this one is about whether
+        maybe_transcribe_segment() runs at all. Off skips it entirely —
+        no subprocess, no toast, no .vtt file.
+
+        Default flipped to `false` the same day, same message as
+        transcode-audio-to-opus's own default flip ("må starte som
+        default Off") — turning it on now runs two sequential checks
+        (transcription_available() for the venv, then
+        whisper_model_cached() for the fixed transcription model), each
+        with its own dialog warning about real disk space. See
+        show_preferences()'s transcribe_row handler.
+      </description>
+    </key>
+    <key name="diarize-audio" type="b">
+      <default>false</default>
+      <summary>Whether transcripts get speaker labels (diarization)</summary>
+      <description>
+        John, 2026-09-26: "Muligens må denne ha en ekstra toggle i
+        Innstillinger. Eneste grunnen til at dette ikke slås på er at
+        brukeren av en eller annen grunn må spare plass." — the only
+        *principled* reason to leave it off once set up is disk space
+        (an extra pyannote model download), but the default itself is
+        still **false**, same as transcribe-audio/transcode-audio-to-opus
+        above (John, same day, correcting an earlier "default true" pass:
+        "Start med av, og la brukeren treffe plakaten når han kommer
+        dit") — diarization needs real one-time manual setup (a
+        HuggingFace account, license acceptance, an access token stored
+        in GNOME Keyring) that can't happen automatically, so there's
+        nothing to be meaningfully "on" about until the user actually
+        does that, the same way turning it on triggers the setup poster
+        by hand. Only takes effect when transcribe-audio is also on —
+        diarization labels speakers within an existing transcript, it
+        doesn't produce one on its own. See show_preferences()'s
+        diarize_row handler and notes.md, "Diarization setup: a
+        keyring-based HuggingFace token".
+      </description>
+    </key>
+    <key name="yaw-augmented-input" type="s">
+      <default>'none'</default>
+      <summary>Optional extra input device for horizontal panning (yaw)</summary>
+      <description>
+        Arrow keys always pan the viewport regardless of this setting
+        (John, 2026-09-21: "Piltaster kan vel fungere uavhengig av hva
+        som er valgt som 'augmented input method'") — this key only picks
+        an *additional* device that works alongside them, not a
+        replacement. One of "none" (the default — no augmented device;
+        shown as "None available" if nothing beyond arrow keys has been
+        validated yet), "scroll-wheel", "surface-dial" — a plain string
+        enum, not a GSettings enum type, matching how RecordMeta's
+        `rights` field already does free-text-with-known-values elsewhere
+        in this app. Only input methods actually validated on real
+        hardware are offered in the Preferences dropdown (John: "Vi
+        fjerner de oppføringene vi ikke finner at har noe for seg"); an
+        unrecognized value here (e.g. hand-edited) falls back to "none".
+      </description>
+    </key>
+    <key name="tilt-augmented-input" type="s">
+      <default>'none'</default>
+      <summary>Optional extra input device for vertical panning (tilt)</summary>
+      <description>
+        Arrow keys' tilt/pitch control always works regardless of this
+        setting, same as yaw-augmented-input. One of "none" (default),
+        "scroll-wheel" — no "surface-dial" entry here, since the Surface
+        Dial only has a single rotation axis (yaw), not a tilt one. See
+        yaw-augmented-input's own comment for the rest of the reasoning.
+      </description>
+    </key>
+    <key name="transcription-model-size" type="s">
+      <default>'small'</default>
+      <summary>Which Whisper model size transcribe.py loads</summary>
+      <description>
+        John, 2026-09-30: "som default skal vi bruke minste modell som
+        får plass i GPU'en... brukeren skal imidlertid kunne be om en
+        større modell" — faster_whisper/CTranslate2 has no automatic
+        "pick the largest that fits" negotiation (checked directly
+        against its own WhisperModel constructor), so this is a plain
+        manual choice rather than anything auto-detected: "small"
+        (default — safest fit on a constrained GPU, e.g. the 5.66GB one
+        this project was developed against), "medium", or "large-v3".
+        One of "small"/"medium"/"large-v3" — a plain string enum, not a
+        GSettings enum type, same convention as yaw-augmented-input
+        above; an unrecognized value (e.g. hand-edited) falls back to
+        "small" the same way. A bigger model needs more GPU memory and is
+        slower to load/run — "small" already transcribes English well but
+        noticeably worse on lower-resource languages like Norwegian (see
+        notes.md, "small model quality"); the user is expected to try a
+        bigger size and see what actually fits and helps, not have it
+        decided for them.
+      </description>
+    </key>
+    <key name="depth-generation-enabled" type="b">
+      <default>false</default>
+      <summary>Whether images without a depth map get one generated automatically</summary>
+      <description>
+        John, 2026-09-30, correcting an earlier misunderstanding: "Vi
+        skal ha en toggle hvor vi slår på depth generation via analyse av
+        bilder... Når vi slår på funksjonaliteten så skal modellen lastes
+        ned. Nedlastingen skal ikke vente til et bilde skal analyseres,
+        vi skal gjøre prefetch" — same shape as transcribe-audio/
+        diarize-audio above: default off, and turning it on triggers an
+        actual eager model download right then (see
+        start_depth_model_prefetch(), same auto-subprocess-on-toggle
+        pattern as diarize-audio's own start_diarization_model_
+        prefetch() — no manual terminal step needed here, unlike
+        transcribe-audio's copy-paste dialog, since Depth-Anything-V2
+        isn't gated and needs no account/token setup first). Off means
+        maybe_generate_depth_on_the_fly() returns immediately for every
+        image, same as transcribe-audio off skips maybe_transcribe_
+        segment() entirely.
+      </description>
+    </key>
+    <key name="depth-model-size" type="s">
+      <default>'small'</default>
+      <summary>Which Depth-Anything-V2 model size generate_depth.py loads</summary>
+      <description>
+        Same shape as transcription-model-size above (John, 2026-09-30:
+        "Vi skal ha samme metodikk for å laste ned modellen for
+        dybdedata. Denne skal også ha valg for model size hvis flere
+        størrelser er tilgjengelig") — they do exist here too, confirmed
+        (not assumed): depth-anything/Depth-Anything-V2-{Small,Base,
+        Large}-hf are three real, separate HF repos. One of "small"
+        (default)/"base"/"large" — a plain string enum, not a GSettings
+        enum type, same convention as yaw-augmented-input/
+        transcription-model-size; an unrecognized value falls back to
+        "small" the same way. A bigger model is more accurate but slower
+        and needs more memory — no auto-fit here either (depth generation
+        currently runs on CPU as often as not, see find_device() in
+        generate_depth.py, so this matters even without a GPU involved).
+      </description>
+    </key>
+    <key name="depth-use-fiducial-markers" type="b">
+      <default>false</default>
+      <summary>Whether ArUco markers are used to anchor depth to real-world distance</summary>
+      <description>
+        John, 2026-09-30: "Vi skal ha et valg for å slå på bruk av
+        referansepunkt. Disse kalles gjerne fiducial markers. Vi bruker
+        ArUco-markører for å beregne avstand og 3D-posisjon (pose
+        estimation)." AprilTag was considered and explicitly set aside
+        for now in favor of ArUco (via OpenCV's own cv2.aruco module,
+        not yet a dependency of demo/depth/requirements.txt) — "da
+        bruker vi aruco, med tilpasningen for AprilTag-familiens
+        ordbøker hvis det blir nødvendig" — cv2.aruco can detect
+        AprilTag-family dictionaries directly if the extra robustness
+        against poor lighting/distance/skewed angle ever turns out to be
+        needed, without a second, more niche dependency. Only meaningful
+        (and only shown in Preferences) while depth-generation-enabled
+        is also on — see notes.md's calibration-marker plan for the
+        wider design this feeds into; the marker-detection/pose-
+        estimation implementation itself doesn't exist yet, this key
+        only carries the on/off intent so far.
+      </description>
+    </key>
+    <key name="show-depth-at-pointer" type="b">
+      <default>false</default>
+      <summary>Whether the "depth: X.XX" readout follows the pointer</summary>
+      <description>
+        John, 2026-09-24 — a sighted-tester verification aid only (like
+        the gaze cursor), never something a blind end user relies on, so
+        it can be turned off in Preferences for anyone who finds it
+        distracting or is testing without it. Defaults off (John,
+        2026-09-24): opt-in verification aid, not something that should
+        show up unasked the first time someone opens an equirect image
+        with a depth file.
+      </description>
+    </key>
+    <key name="prod-cue-duration-ms" type="i">
+      <range min="0" max="5000"/>
+      <default>300</default>
+      <summary>How long the prod-event visual cue takes to fade out, in milliseconds</summary>
+      <description>
+        A soft white glow shown briefly at a prod event's position — the
+        demo's mouse click stands in for a real blink-triggered prod
+        (John, 2026-09-30: "Prod evens for eye gaze starter ved
+        blunking, men i demoen så bruker vi klikking med musa som
+        tilnærming... Vi legger på en fuzzy sky der pekeren er"), and the
+        glow is the visible confirmation that it registered. Chosen as a
+        tunable setting rather than a fixed constant, deliberately —
+        John wants to calibrate duration/size/peak-opacity together
+        against real testers until the cue reads as "visible to a
+        sighted tester, not to someone with residual vision," a target
+        no single guessed number can hit outright. See
+        prod-cue-diameter-scale and prod-cue-peak-opacity, which tune
+        the same cue.
+      </description>
+    </key>
+    <key name="prod-cue-diameter-scale" type="d">
+      <range min="1.0" max="8.0"/>
+      <default>2.0</default>
+      <summary>Prod-event glow diameter, as a multiple of the gaze cursor's own diameter</summary>
+      <description>
+        Relative to gaze_cursor_diameter_px(), not an absolute pixel
+        size, so it scales the same way the gaze cursor itself already
+        does with viewing distance/screen size. See
+        prod-cue-duration-ms's own description for the wider design this
+        is part of.
+      </description>
+    </key>
+    <key name="prod-cue-peak-opacity" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.35</default>
+      <summary>Prod-event glow's opacity at its brightest (center, moment it appears)</summary>
+      <description>
+        The glow is a radial gradient fading to fully transparent at its
+        own edge regardless of this value — this only sets how strong
+        the center itself starts out before the whole thing fades over
+        prod-cue-duration-ms. See prod-cue-duration-ms's own description
+        for the wider design this is part of.
+      </description>
+    </key>
+    <key name="depth-estimate-grid-size" type="s">
+      <choices>
+        <choice value="1"/>
+        <choice value="4"/>
+        <choice value="9"/>
+        <choice value="16"/>
+        <choice value="25"/>
+      </choices>
+      <default>'9'</default>
+      <summary>Grid element count for a prod's averaged distance estimate</summary>
+      <description>
+        John, 2026-09-30, first take on the acoustic model's distance
+        cue: "Når prod'et kommer så beregner vi en midlere avstand
+        innenfor et grid sentrert på det som tilsvarer en gaze-sirkel.
+        Grid'en består av ett element, 4, 9, 16, og 25. Disse
+        grid-størrelsene gjør vi valgbare i Innstillinger." The value is
+        the element count (N×N for N=1..5), matching how John named the
+        options directly, not N itself. See compute_prod_distance_m()
+        (main.cpp) for how the grid itself is laid out and averaged.
+      </description>
+    </key>
+    <key name="noise-pulse-attack-ms" type="d">
+      <range min="0.0" max="500.0"/>
+      <default>5.0</default>
+      <summary>Noise-pulse ADSR attack time, in milliseconds</summary>
+      <description>
+        First take on the acoustic model's carrier signal (John,
+        2026-09-30): "Vi skal lage en støypuls. Dette skal ha en
+        klassisk ADSR som parametre... ADSR må antakelig tunes for å få
+        et godt lydbilde" — tunable rather than fixed for exactly that
+        reason. See noise_pulse.hpp/.cpp for the synthesis itself.
+      </description>
+    </key>
+    <key name="noise-pulse-decay-ms" type="d">
+      <range min="0.0" max="500.0"/>
+      <default>50.0</default>
+      <summary>Noise-pulse ADSR decay time, in milliseconds</summary>
+      <description>
+        See noise-pulse-attack-ms's own description for the wider
+        design this is part of.
+      </description>
+    </key>
+    <key name="noise-pulse-sustain-level" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.3</default>
+      <summary>Noise-pulse ADSR sustain level (0-1, not a duration)</summary>
+      <description>
+        The classic ADSR "S" — a level, not a time (see
+        noise-pulse-sustain-ms for the duration that level is actually
+        held, which classic ADSR doesn't need since it assumes a
+        held/released key; a one-shot prod has no such gesture). See
+        noise-pulse-attack-ms's own description for the wider design.
+      </description>
+    </key>
+    <key name="noise-pulse-sustain-ms" type="d">
+      <range min="0.0" max="1000.0"/>
+      <default>30.0</default>
+      <summary>How long the noise-pulse's sustain level is held, in milliseconds</summary>
+      <description>
+        Not one of the classic four ADSR parameters — added because a
+        prod is a discrete, instantaneous event with no held/released
+        gesture for Sustain to last "as long as" (see
+        noise-pulse-sustain-level's own description). Without this,
+        Release would have no well-defined moment to begin.
+      </description>
+    </key>
+    <key name="noise-pulse-release-ms" type="d">
+      <range min="0.0" max="2000.0"/>
+      <default>100.0</default>
+      <summary>Noise-pulse ADSR release time, in milliseconds</summary>
+      <description>
+        See noise-pulse-attack-ms's own description for the wider
+        design this is part of.
+      </description>
+    </key>
+    <key name="noise-pulse-color" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.6</default>
+      <summary>Noise-pulse color/brightness (0 dark .. 1 bright)</summary>
+      <description>
+        John, 2026-09-30: "Støypulsen skal være farget, så vi trenger en
+        color-parameter. Denne parametren er delvis under brukerens
+        kontrol, men vi skal gjøre ytterligere filtrering" — this is the
+        user-facing half: the target brightness. The code applies the
+        actual one-pole lowpass filter that produces it (the "ytterligere
+        filtrering") — see NoisePulseImpl::render_one_sample()
+        (noise_pulse.cpp). 0 filters heavily (dark/brown noise), 1 barely
+        filters at all (bright/white noise).
+      </description>
+    </key>
+    <key name="noise-pulse-gain" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.5</default>
+      <summary>Noise-pulse overall linear amplitude (0-1)</summary>
+      <description>
+        See noise-pulse-attack-ms's own description for the wider
+        design this is part of.
+      </description>
+    </key>
+    <key name="noise-pulse-max-delay-ms" type="i">
+      <range min="0" max="30000"/>
+      <default>2000</default>
+      <summary>Ceiling on the distance-based echo delay, in milliseconds</summary>
+      <description>
+        John, 2026-09-30, first take on the distance→delay mapping
+        ("100 meter er omtrent 0.3 sekund forsinkelse"): a real bug
+        found live the same day — raw_depth_to_distance_m()'s own floor
+        caps distance at 10,000 m for sky/far-background pixels (a
+        reasonable ceiling for the *distance estimate*), which unclamped
+        is up to 30 seconds of delay, enough for a pulse to surface long
+        after anything currently happening, reading as "random prods
+        lenge etter at det burde stoppet... kan se ut som det kommer fra
+        muspekeren." This caps the delay itself, not the distance
+        estimate. See distance_to_delay_ms() (main.cpp).
+      </description>
+    </key>
+    <key name="noise-pulse-max-delay-is-no-data" type="b">
+      <default>true</default>
+      <summary>Whether exceeding the max delay means "no reliable distance" (silent) rather than just capping it</summary>
+      <description>
+        John, 2026-09-30: "Vi kan bruke en valgfri cap hvor vi setter
+        'ingen data'" — sky/undefined regions give a raw depth near zero
+        (measured directly: 30-40% of pixels in several real example
+        depth files), which the reciprocal distance formula blows up
+        into an enormous delay rather than a genuinely far-but-real
+        surface ("Det er dybden som går til 10 000 meter! :D"). On
+        (the default): past noise-pulse-max-delay-ms, play nothing at
+        all rather than guess. Off: clamp to the max delay instead, the
+        original behavior. See distance_to_delay_ms() (main.cpp).
+      </description>
+    </key>
+    <key name="head-prod-sequence-step-ms" type="i">
+      <range min="0" max="1000"/>
+      <default>50</default>
+      <summary>Delay between steps of a head-prod's elevation sweep, in milliseconds</summary>
+      <description>
+        A head-prod is a swept sequence of individual prods, not one prod
+        at center (John, 2026-09-30, extending the periscope-graticule
+        head-direction cross: "Når vi utløser en head-prod så er det en
+        sekvens av slike. Vi starter ved -25° og jobber oss oppover til
+        +15°, og fyrer en prod ved hvert 5° merke" — nine steps,
+        -25°/-20°/-15°/-10°/-5°/0°/5°/10°/15°, the same elevations the
+        graticule's own ticks and top endpoint mark). This is the delay
+        between each step; 0 fires the whole sequence back-to-back with
+        no visible sweep at all. Default guessed at 50ms (John: "Jeg
+        tror default er rundt 50ms, men jeg vet ikke. Kan være helt ned
+        i 20ms") — tunable rather than fixed, same "calibrate live"
+        reasoning as prod-cue-duration-ms and friends.
+      </description>
+    </key>
+    <key name="last-project" type="s">
+      <default>''</default>
+      <summary>Last opened/created project directory</summary>
+      <description>
+        John, 2026-10-xx: a project is a directory holding a protocol.md
+        plus its related recording sessions — reopened automatically on
+        next launch, same "remember the working context" convention as
+        current-working-session. Empty string means none yet.
+      </description>
+    </key>
+    <key name="recent-projects" type="as">
+      <default>[]</default>
+      <summary>Recently opened/created project directories</summary>
+      <description>
+        Absolute directory paths, most recent first — the new project
+        dropdown's own recents list, leftmost in the header bar.
+      </description>
+    </key>
+    <key name="max-recent-projects" type="i">
+      <range min="1" max="50"/>
+      <default>10</default>
+      <summary>Maximum number of recent projects to remember</summary>
+      <description>
+        Caps the project dropdown's recents list — older entries are
+        dropped once a new project is opened past this count.
+      </description>
+    </key>
+    <key name="project-slug-counter" type="i">
+      <default>0</default>
+      <summary>Global counter used to make new project directory names unique</summary>
+      <description>
+        John, 2026-10-xx: "tror vi legger til et tall fra gsettings for
+        å unngå kollisjoner. Dette tallet inkrementerer vi hver gang vi
+        tar et nytt i bruk." Incremented every time a new project
+        directory is actually created (including retries after an
+        on-disk name collision) — never decremented, and never
+        guaranteed consistent with another app/machine sharing the same
+        parent directory. No Preferences row — this is bookkeeping, not
+        a user-facing option; edit it directly in gsettings if ever
+        needed.
+      </description>
+    </key>
+    <key name="project-slug-counter-digits" type="i">
+      <range min="1" max="12"/>
+      <default>6</default>
+      <summary>Zero-padded digit count for the project directory counter</summary>
+      <description>
+        John, 2026-10-xx: "bruker 6 tall (?) og fyller inn null'er for å
+        gjøre det mer lesbart." No Preferences row — read straight from
+        gsettings, same "no UI, edit the key directly if needed"
+        convention as max-recent-projects' own undecorated siblings.
+      </description>
+    </key>
+    <key name="project-title-cutoff-chars" type="i">
+      <range min="1" max="200"/>
+      <default>40</default>
+      <summary>Max characters shown on the project dropdown's own button face</summary>
+      <description>
+        John, 2026-10-xx: "Venstre side i dropdown'en skal vise navnet
+        på prosjektet... med en cut-off og hellip om den er for lang.
+        Antall tegn går i gsettings... brukeren kan endre verdien rett i
+        gsettings om nødvendig." No Preferences row by design.
+      </description>
+    </key>
+    <key name="session-title-cutoff-chars" type="i">
+      <range min="1" max="200"/>
+      <default>40</default>
+      <summary>Max characters shown on the session dropdown's own button face</summary>
+      <description>
+        John, 2026-10-03: "Og så må dette venstrefeltet ha en maks
+        lengde, som hentes fra gsettings. Ved overflow så legges det på
+        en hellip" — the session dropdown's button face shows
+        "[creator]: [contributor]" (session_button_label(), main.cpp),
+        truncated the same way project-title-cutoff-chars truncates the
+        project dropdown's own label. No Preferences row by design, same
+        convention as project-title-cutoff-chars.
+      </description>
+    </key>
+    <key name="image-title-cutoff-chars" type="i">
+      <range min="1" max="200"/>
+      <default>40</default>
+      <summary>Max characters shown on the image dropdown's own button face</summary>
+      <description>
+        John, 2026-10-06: image titles had no cutoff at all until now,
+        unlike project-title-cutoff-chars/session-title-cutoff-chars —
+        an uncapped title's own varying width was part of why clicking
+        Previous/Next shifted those buttons right out from under the
+        user's next click ("da kan brukeren klikke feil"). Same
+        truncate-then-ellipsis convention as the other two. No
+        Preferences row by design, same convention as those.
+      </description>
+    </key>
+    <key name="last-project-parent-folder" type="s">
+      <default>''</default>
+      <summary>Last parent folder used when creating/opening a project</summary>
+      <description>
+        Same "remember the last folder" convention as last-image-folder,
+        for the New/Open Project folder pickers.
+      </description>
+    </key>
+    <key name="preferred-bigrams" type="a{ss}">
+      <default>{}</default>
+      <summary>Pinned name-to-bigram mappings for the monitoring matrix's header buttons</summary>
+      <description>
+        John, 2026-10-12: assign_bigrams() (monitoring_dialogs.cpp)
+        otherwise picks a participant's two-letter header label fresh
+        every session from their name alone, which can land on a
+        different pair session to session. A name present here gets its
+        mapped bigram instead, honored unless it collides with an
+        earlier participant's own pinned or natural choice. Normally
+        holds only a couple of entries — typically just the user's own
+        full name, so their own header stays recognizable across
+        sessions. Edited via the Preferences dialog.
+      </description>
+    </key>
+    <key name="preferred-sink-devices" type="a{ss}">
+      <default>{}</default>
+      <summary>Preferred listening device per fixed participant</summary>
+      <description>
+        John, 2026-10-12: a default for MonitoringState::
+        sink_device_assignment (monitoring.hpp) — Ambient Speaker and
+        every name with a preferred bigram (the same "fixed
+        participants" set as preferred-bigrams). Each value is "device
+        id\x1Fdisplay name" (preferences.cpp's own encode/
+        decode_preferred_device()) — a nested a{s(ss)} dict-of-tuples
+        was tried first and didn't round-trip through glibmm's generic
+        map-to-Variant template (cast_dynamic() threw std::bad_cast
+        reading it back, crashing the app), so this stays on the same
+        flat a{ss} shape preferred-bigrams already proved works. Only
+        seeded into a session's actual state when no
+        assignment already exists there
+        (seed_preferred_devices(), monitoring_dialogs.cpp) — a default,
+        not a lock, so it's freely overridden per session; what actually
+        gets logged to a track is always that live state, never this
+        setting directly. An empty device id means "no preferred
+        device, assign it by hand each session" instead. Edited via the
+        Preferences dialog.
+      </description>
+    </key>
+    <key name="preferred-source-devices" type="a{ss}">
+      <default>{}</default>
+      <summary>Preferred microphone device per fixed participant</summary>
+      <description>
+        Same shape and seeding rule as preferred-sink-devices, for
+        MonitoringState::source_device_assignment — Ambient Microphone
+        and every name with a preferred bigram.
+      </description>
+    </key>
+    <key name="synthesized-volumes" type="a{sd}">
+      <default>{}</default>
+      <summary>Synthesized volume per listener</summary>
+      <description>
+        Keyed by participant name, or by the Ambient Speaker's sentinel
+        id. Set on the synthesized sound played into that listener's own
+        output device; the device's own volume is never changed.
+        Participants on the Ambient Speaker have none of their own. In dB;
+        no entry means 0 dB.
+      </description>
+    </key>
+    <key name="participants-volumes" type="a{sd}">
+      <default>{}</default>
+      <summary>Participants volume per listener</summary>
+      <description>
+        Keyed like synthesized-volumes: how loud that listener hears
+        everyone's voices, independent of the synthesized volume. In dB;
+        no entry means 0 dB.
+      </description>
+    </key>
+    <key name="pointer-fixation-ms" type="i">
+      <range min="50" max="2000"/>
+      <default>250</default>
+      <summary>Pointer fixation time (ms)</summary>
+      <description>
+        How long the mouse pointer, standing in for an eye tracker, must
+        rest before it prods where it stopped (an implicit eye-prod). Also
+        how recent head movement must be for such a pause to count as head
+        tracking rather than a gaze shift. Suited to a mouse only; a real
+        eye tracker's fixations are much shorter and need their own value.
+      </description>
+    </key>
+    <key name="agc-target-dbfs" type="d">
+      <range min="-40" max="-6"/>
+      <default>-23</default>
+      <summary>Voice levelling target (dBFS)</summary>
+      <description>
+        RMS speech level the voice leveller aims for, shared by every
+        microphone. -23 dBFS matches EBU R 128's -23 LUFS loudness target
+        closely enough for speech.
+      </description>
+    </key>
+    <key name="agc-attack-ms" type="i">
+      <range min="50" max="30000"/>
+      <default>200</default>
+      <summary>Voice levelling attack (ms)</summary>
+      <description>How quickly the leveller turns a loud speaker down.</description>
+    </key>
+    <key name="agc-release-ms" type="i">
+      <range min="50" max="60000"/>
+      <default>500</default>
+      <summary>Voice levelling release (ms)</summary>
+      <description>How quickly the leveller turns a quiet speaker up.</description>
+    </key>
+    <key name="agc-max-gain-db" type="d">
+      <range min="0" max="40"/>
+      <default>20</default>
+      <summary>Voice levelling maximum gain (dB)</summary>
+      <description>
+        The most the leveller raises or lowers a speaker. Kept moderate so
+        a quiet microphone's room noise is never lifted far.
+      </description>
+    </key>
+    <key name="source-agc" type="a{sb}">
+      <default>{}</default>
+      <summary>Voice levelling on/off per participant</summary>
+      <description>
+        Keyed like source-volumes. No entry means on.
+      </description>
+    </key>
+    <key name="source-volumes" type="a{sd}">
+      <default>{}</default>
+      <summary>Voice volume per participant</summary>
+      <description>
+        Keyed by participant name, or by the Ambient Microphone's
+        sentinel id. Applied to what every listener hears from that
+        microphone, not to the microphone itself, so recordings stay
+        untouched. In dB; no entry means 0 dB.
+      </description>
+    </key>
+  </schema>
+</schemalist>

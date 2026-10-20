@@ -7,6 +7,7 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 endif()
 
 project(blind-sight-lib
+    VERSION 0.1.0
     LANGUAGES CXX
     DESCRIPTION "Gaze-steered synthetic-echo sensory substitution — acoustic scene library and demo")
 
